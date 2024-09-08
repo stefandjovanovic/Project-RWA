@@ -13,6 +13,8 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const bcrypt = require("bcrypt");
 const roles_enum_1 = require("./enums/roles.enum");
+const player_details_entity_1 = require("../users/entities/player-details.entity");
+const manager_details_entity_1 = require("../users/entities/manager-details.entity");
 let User = class User {
     async validatePassword(password) {
         const hash = await bcrypt.hash(password, this.salt);
@@ -56,6 +58,16 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "salt", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => player_details_entity_1.PlayerDetails, playerDetails => playerDetails.user, { eager: true, cascade: true }),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", player_details_entity_1.PlayerDetails)
+], User.prototype, "playerDetails", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => manager_details_entity_1.ManagerDetails, managerDetails => managerDetails.user, { eager: true, cascade: true }),
+    (0, typeorm_1.JoinColumn)(),
+    __metadata("design:type", manager_details_entity_1.ManagerDetails)
+], User.prototype, "managerDetails", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)(),
     (0, typeorm_1.Unique)(['username', 'email'])

@@ -1,6 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { Role } from "./enums/roles.enum";
+import { PlayerDetails } from "src/users/entities/player-details.entity";
+import { ManagerDetails } from "src/users/entities/manager-details.entity";
 
 @Entity()
 @Unique(['username', 'email'])
@@ -31,6 +33,14 @@ export class User {
 
   @Column()
   salt: string;
+
+  @OneToOne(() => PlayerDetails, playerDetails => playerDetails.user, { eager: true, cascade: true })
+  @JoinColumn()
+  playerDetails: PlayerDetails;
+
+  @OneToOne(() => ManagerDetails, managerDetails => managerDetails.user, { eager: true, cascade: true })
+  @JoinColumn()
+  managerDetails: ManagerDetails;
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

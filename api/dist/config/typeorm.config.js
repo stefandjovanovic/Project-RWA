@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.typeOrmConfig = void 0;
+exports.connectionSource = exports.typeOrmConfig = void 0;
+const typeorm_1 = require("typeorm");
 exports.typeOrmConfig = {
     type: 'postgres',
     host: 'localhost',
@@ -8,7 +9,9 @@ exports.typeOrmConfig = {
     username: 'postgres',
     password: 'mysecretpassword',
     database: 'ballball',
-    entities: [__dirname + '/../**/*.entity.{js,ts}'],
+    entities: ["dist/**/*.entity{.ts,.js}"],
     synchronize: true,
+    migrations: ["dist/migrations/*{.ts,.js}"],
 };
+exports.connectionSource = new typeorm_1.DataSource(exports.typeOrmConfig);
 //# sourceMappingURL=typeorm.config.js.map

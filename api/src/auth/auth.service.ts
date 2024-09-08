@@ -9,6 +9,7 @@ import { Role } from './enums/roles.enum';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthResponseDto } from './dto/auth-response.dto';
+import { PlayerDetails } from 'src/users/entities/player-details.entity';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +31,12 @@ export class AuthService {
         user.address = signUpCredentialsDto.address;
         user.role = Role.USER;
         user.salt = salt;
+        //user.playerDetails = null;
+        user.playerDetails = new PlayerDetails();
+        user.playerDetails.bio = "";
+        user.playerDetails.profilePicture = "";
+        user.playerDetails.user = user;
+        user.managerDetails = null;
         user.password = await bcrypt.hash(signUpCredentialsDto.password, salt);
 
         try {
@@ -37,6 +44,7 @@ export class AuthService {
             const accessToken = this.generateJwtToken(user);
             return {accessToken};
         } catch (error) {
+            console.log(error);
             if(error.code === '23505') {
                 throw new ConflictException('Username or email already exists');
             } else {
