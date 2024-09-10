@@ -5,7 +5,6 @@ import { PlayerDetails } from "src/users/entities/player-details.entity";
 import { ManagerDetails } from "src/users/entities/manager-details.entity";
 
 @Entity()
-@Unique(['username', 'email'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -13,10 +12,10 @@ export class User {
   @Column()
   role: Role;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
-  @Column() 
+  @Column({ unique: true }) 
   email: string;
 
   @Column()

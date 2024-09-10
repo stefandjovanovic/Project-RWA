@@ -45,7 +45,14 @@ let AuthService = class AuthService {
         try {
             await this.userRepository.save(user);
             const accessToken = this.generateJwtToken(user);
-            return { accessToken };
+            let profilePicture;
+            if (user.playerDetails && user.playerDetails.profilePicture) {
+                profilePicture = user.playerDetails.profilePicture;
+            }
+            else {
+                profilePicture = "";
+            }
+            return { accessToken, profilePicture };
         }
         catch (error) {
             console.log(error);
@@ -63,7 +70,14 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         const accessToken = this.generateJwtToken(user);
-        return { accessToken };
+        let profilePicture;
+        if (user.playerDetails && user.playerDetails.profilePicture) {
+            profilePicture = user.playerDetails.profilePicture;
+        }
+        else {
+            profilePicture = "";
+        }
+        return { accessToken, profilePicture };
     }
     async validateSignInCredentials(signInCredentialsDto) {
         const { email, password } = signInCredentialsDto;

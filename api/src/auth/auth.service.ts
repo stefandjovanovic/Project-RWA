@@ -42,7 +42,13 @@ export class AuthService {
         try {
             await this.userRepository.save(user);
             const accessToken = this.generateJwtToken(user);
-            return {accessToken};
+            let profilePicture;
+            if(user.playerDetails && user.playerDetails.profilePicture) {
+                profilePicture = user.playerDetails.profilePicture;
+            } else {
+                profilePicture = "";
+            }
+            return {accessToken, profilePicture};
         } catch (error) {
             console.log(error);
             if(error.code === '23505') {
@@ -64,7 +70,14 @@ export class AuthService {
 
         const accessToken = this.generateJwtToken(user);
 
-        return {accessToken};
+        let profilePicture;
+        if(user.playerDetails && user.playerDetails.profilePicture) {
+                profilePicture = user.playerDetails.profilePicture;
+        } else {
+                profilePicture = "";
+        }
+
+        return {accessToken, profilePicture};
     }
 
     
