@@ -15,8 +15,10 @@ import { EffectsModule } from '@ngrx/effects';
 import * as fromApp from './store/app.reducer';
 import {AuthEffects} from "./modules/auth/store/auth/auth.effects";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {AuthInterceptorService} from "./modules/auth/services/auth-interceptor.service";
+import {AdminPanelEffects} from "./modules/auth/store/admin-panel/admin-panel.effects";
 
 @NgModule({
   declarations: [
@@ -34,11 +36,15 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     MatSnackBarModule,
     HttpClientModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      AdminPanelEffects
+    ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

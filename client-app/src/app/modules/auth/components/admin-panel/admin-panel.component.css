@@ -1,0 +1,19 @@
+.filter{
+  margin-top: 20px;
+  margin-bottom: 0px;
+  width: 30%;
+  min-width: 180px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.table{
+  border: 1px solid #E0E0E0;
+  margin: auto;
+  width: 95%;
+  border-radius: 5px;
+}
+.pages{
+  margin: auto;
+  margin-top: 10px;
+}

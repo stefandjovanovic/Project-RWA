@@ -16,4 +16,5 @@ export class PlayerDetails {
   user: User;
 
 
+
 }

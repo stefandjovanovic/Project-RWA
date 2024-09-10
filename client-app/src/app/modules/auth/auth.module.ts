@@ -10,6 +10,10 @@ import {MatTableModule} from "@angular/material/table";
 import {RouterModule} from "@angular/router";
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import {MatInput} from "@angular/material/input";
+import {MatIconModule} from "@angular/material/icon";
+import {AuthGuard} from "./guards/auth.guard";
+import {AdminGuard} from "./guards/admin.guard";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 
 
@@ -22,7 +26,7 @@ import {MatInput} from "@angular/material/input";
     CommonModule,
     RouterModule.forChild([
       {path: '', component: AuthComponent},
-      {path: 'admin-panel', component: AdminPanelComponent}
+      {path: 'admin-panel', canActivate: [AuthGuard, AdminGuard], component: AdminPanelComponent}
     ]),
     MatProgressSpinnerModule,
     MatGridListModule,
@@ -30,7 +34,8 @@ import {MatInput} from "@angular/material/input";
     MatInput,
     MatFormFieldModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule
   ]
 })
 export class AuthModule { }

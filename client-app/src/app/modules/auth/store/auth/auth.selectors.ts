@@ -27,3 +27,13 @@ export const selectRole = createSelector(
   selectUser,
   (state) => state.role
 )
+
+export const selectUsername = createSelector(
+  selectUser,
+  (state) => state.username
+)
+
+export const selectIsAuthenticated = createSelector(
+  selectUser,
+  (state) => !!state
+)

@@ -9,5 +9,6 @@ export class ManagerDetails {
   @OneToOne(() => User, user => user.managerDetails, {eager: false})
   user: User;
 
+
   
 }

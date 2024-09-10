@@ -82,6 +82,7 @@ export class AuthEffects{
         if(!userData){
           return {type: 'DUMMY'};
         }
+        userData.tokenExpirationDate = new Date(userData.tokenExpirationDate);
         if(userData.tokenExpirationDate > new Date()){
           return AuthActions.authenticate({user: userData, redirect: false});
         }

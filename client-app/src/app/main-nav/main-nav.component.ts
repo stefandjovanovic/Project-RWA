@@ -4,7 +4,13 @@ import {Observable, Subscription} from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {Store} from "@ngrx/store";
 import {AppState} from "../store/app.reducer";
-import {selectUser} from "../modules/auth/store/auth/auth.selectors";
+import {
+  selectAuthState,
+  selectIsAuthenticated,
+  selectRole,
+  selectUser,
+  selectUsername
+} from "../modules/auth/store/auth/auth.selectors";
 import {logout} from "../modules/auth/store/auth/auth.actions";
 
 @Component({
@@ -18,6 +24,7 @@ export class MainNavComponent implements OnInit, OnDestroy{
   isAuthenticated: boolean = false;
   role?: string;
   username?: string;
+
 
   constructor(private store: Store<AppState>) {
   }

@@ -29,7 +29,7 @@ export class AuthService {
         user.firstName = signUpCredentialsDto.firstName;
         user.lastName = signUpCredentialsDto.lastName;
         user.address = signUpCredentialsDto.address;
-        user.role = Role.USER;
+        user.role = Role.PLAYER;
         user.salt = salt;
         //user.playerDetails = null;
         user.playerDetails = new PlayerDetails();

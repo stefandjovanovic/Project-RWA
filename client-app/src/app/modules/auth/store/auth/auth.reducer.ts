@@ -2,7 +2,6 @@ import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
 import {User} from "../../interfaces/user.interface";
 import {createReducer, on} from "@ngrx/store";
 import * as AuthActions from "./auth.actions";
-import {signInStart} from "./auth.actions";
 export interface State extends EntityState<User>{
   authError: string | null;
   loading: boolean;
