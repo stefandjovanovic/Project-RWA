@@ -1,0 +1,55 @@
+<mat-grid-list cols="5">
+  <mat-grid-tile [colspan]="2" [rowspan]="1">
+    <!-- Upper left-->
+    <div class="display-flex">
+      <img class="image" [src]="player.profilePicture">
+      <button *ngIf="belongsToCurrentUser"
+              mat-raised-button class="button" color="accent"
+              (click)="addImage()">New photo</button>
+      <button *ngIf="belongsToCurrentUser"
+              mat-button class="button" color="warn"
+              (click)="deleteImage()">Delete photo</button>
+    </div>
+
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="3" [rowspan]="2">
+    <app-reviews-list [reviews]="player.reviews" (reviewAdded)="onReviewAdded($event)"></app-reviews-list>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="2" [rowspan]="1">
+    <!-- Middle left-->
+    <div class="display-flex">
+      <mat-card class="form">
+        <mat-card-header style="margin-bottom: 20px">
+          <mat-card-title>
+            {{ player.firstName}} {{player.lastName}}
+          </mat-card-title>
+          <mat-card-subtitle>
+            <b>{{ username }}</b>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <h4>
+            <span class="bold">Rating:</span> {{rating ? rating.toPrecision(2): 'Not rated'}}
+            <mat-icon *ngIf="rating" color="accent">star</mat-icon>
+          </h4>
+          <h4>
+            <span class="bold">Bio:</span>
+            {{player.bio}}
+          </h4>
+
+          <h4>
+            <span class="bold">Address:</span>
+            {{player.address}}
+          </h4>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button *ngIf="belongsToCurrentUser" mat-raised-button color="primary" class="button" (click)="onEditBio()">Edit bio</button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+
+  </mat-grid-tile>
+
+</mat-grid-list>

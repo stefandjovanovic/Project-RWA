@@ -1,5 +1,6 @@
+import { ReviewDto } from "./review.dto";
 export declare class PlayerDetailsDto {
-    playerId: string;
+    id: string;
     username: string;
     email: string;
     firstName: string;
@@ -7,4 +8,5 @@ export declare class PlayerDetailsDto {
     address: string;
     bio: string;
     profilePicture: string;
+    reviews: ReviewDto[];
 }

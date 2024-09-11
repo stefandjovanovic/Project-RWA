@@ -1,5 +1,6 @@
 import { User } from "src/auth/user.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Review } from "./review.entity";
 
 @Entity()
 export class PlayerDetails {
@@ -15,6 +16,8 @@ export class PlayerDetails {
   @OneToOne(() => User, user => user.playerDetails, {eager: false})
   user: User;
 
+  @OneToMany(() => Review, review => review.user, {eager: true, cascade: true})
+  reviews: Review[];
 
 
 }

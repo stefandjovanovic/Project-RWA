@@ -19,6 +19,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {AuthInterceptorService} from "./modules/auth/services/auth-interceptor.service";
 import {AdminPanelEffects} from "./modules/auth/store/admin-panel/admin-panel.effects";
+import {PlayerPageEffects} from "./modules/player/store/player-page/player-page.effects";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import {AdminPanelEffects} from "./modules/auth/store/admin-panel/admin-panel.ef
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([
       AuthEffects,
-      AdminPanelEffects
+      AdminPanelEffects,
+      PlayerPageEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],

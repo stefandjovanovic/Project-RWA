@@ -1,12 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Like, Repository } from 'typeorm';
 import { PlayerDetailsDto } from './dto/player-details.dto';
 import { UserInfoDto } from './dto/user-info.dto';
 import { Role } from 'src/auth/enums/roles.enum';
 import { PlayerDetails } from './entities/player-details.entity';
 import { ManagerDetails } from './entities/manager-details.entity';
+import { ReviewDto } from './dto/review.dto';
+import { Review } from './entities/review.entity';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { PhotoDto } from './dto/photo.dto';
 
 @Injectable()
 export class UsersService {
@@ -15,21 +19,18 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
-        @InjectRepository(PlayerDetails)
-        private playerDetailsRepository: Repository<PlayerDetails>,
-        @InjectRepository(ManagerDetails)
-        private managerDetailsRepository: Repository<ManagerDetails>
+        private clodinaryService: CloudinaryService
     ) {}
 
-    async getPlayerDetails(id: string): Promise<PlayerDetailsDto> {
-        const user = await this.userRepository.findOneBy({id});
+    async getPlayerDetails(username: string): Promise<PlayerDetailsDto> {
+        const user = await this.userRepository.findOneBy({username});
 
         if (!user) {
-            throw new NotFoundException(`User with ID ${id} not found`);
+            throw new NotFoundException(`User with ID ${username} not found`);
         }
 
         const playerDetails = new PlayerDetailsDto();
-        playerDetails.playerId = user.id;
+        playerDetails.id = user.id;
         playerDetails.username = user.username;
         playerDetails.email = user.email;
         playerDetails.firstName = user.firstName;
@@ -37,8 +38,62 @@ export class UsersService {
         playerDetails.address = user.address;
         playerDetails.bio = user.playerDetails.bio;
         playerDetails.profilePicture = user.playerDetails.profilePicture;
+        playerDetails.reviews = user.playerDetails.reviews.map(review => {
+            const reviewDto = new ReviewDto();
+            reviewDto.comment = review.comment;
+            reviewDto.rating = review.rating;
+            reviewDto.username = review.username;
+            return reviewDto;
+        });
 
         return playerDetails;
+    }
+
+    async addReview(username: string, reviewDto: ReviewDto): Promise<void> {
+        const user = await this.userRepository.findOneBy({username});
+
+        if (!user) {
+            throw new NotFoundException(`User with username ${username} not found`);
+        }
+        const review = new Review();
+        review.comment = reviewDto.comment;
+        review.rating = reviewDto.rating;
+        review.username = reviewDto.username;
+        user.playerDetails.reviews.push(review);
+        review.user = user.playerDetails;
+
+        await this.userRepository.save(user);
+    }
+
+    async editBio(username: string, bio: string): Promise<void> {
+        const user = await this.userRepository.findOneBy({username});
+
+        if (!user) {
+            throw new NotFoundException(`User with username ${username} not found`);
+        }
+
+        user.playerDetails.bio = bio;
+
+        await this.userRepository.save(user);
+    }
+
+    async uploadProfilePicture(file: Express.Multer.File, userId: string): Promise<PhotoDto> {
+
+        const uploaded = await this.clodinaryService.uploadImage(file).catch(() => {
+            throw new BadRequestException('Invalid file');
+        });
+
+        const user = await this.userRepository.findOneBy({id: userId});
+        user.playerDetails.profilePicture = uploaded.url;
+        await this.userRepository.save(user);
+
+        return {photoUrl: uploaded.url};
+    }
+
+    async deleteProfilePicture(userId: string): Promise<void> {
+        const user = await this.userRepository.findOneBy({id: userId});
+        user.playerDetails.profilePicture = '';
+        await this.userRepository.save(user);
     }
 
     async getUsersWithRoles(appUser: User): Promise<UserInfoDto[]> {
@@ -79,6 +134,7 @@ export class UsersService {
                     user.playerDetails.bio = '';
                     user.playerDetails.profilePicture = '';
                     user.playerDetails.user = user;
+                    user.playerDetails.reviews = [];
                 }
             }
             break;
@@ -113,6 +169,33 @@ export class UsersService {
             throw new NotFoundException(`User with username ${id} not found`);
         }
         await this.userRepository.remove(user);
+    }
+
+    async searchUser(username: string): Promise<PlayerDetailsDto[]> {
+        const users = await this.userRepository.find({
+            where: { 
+                username: ILike(`%${username}%`),
+                role: Role.PLAYER
+            }
+        });
+
+        if (users.length === 0) {
+            return [];
+        }
+
+
+        return users.map(user => {
+            const playerDetails = new PlayerDetailsDto();
+            playerDetails.username = user.username;
+            playerDetails.email = user.email;
+            playerDetails.firstName = user.firstName;
+            playerDetails.lastName = user.lastName;
+            playerDetails.address = user.address;
+            playerDetails.id = user.id;
+            playerDetails.bio = user.playerDetails.bio;
+            playerDetails.profilePicture = user.playerDetails.profilePicture;
+            return playerDetails;
+        });
     }
 
 

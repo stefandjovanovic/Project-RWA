@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayerDetails = void 0;
 const user_entity_1 = require("../../auth/user.entity");
 const typeorm_1 = require("typeorm");
+const review_entity_1 = require("./review.entity");
 let PlayerDetails = class PlayerDetails {
 };
 exports.PlayerDetails = PlayerDetails;
@@ -31,6 +32,10 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.User, user => user.playerDetails, { eager: false }),
     __metadata("design:type", user_entity_1.User)
 ], PlayerDetails.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => review_entity_1.Review, review => review.user, { eager: true, cascade: true }),
+    __metadata("design:type", Array)
+], PlayerDetails.prototype, "reviews", void 0);
 exports.PlayerDetails = PlayerDetails = __decorate([
     (0, typeorm_1.Entity)()
 ], PlayerDetails);

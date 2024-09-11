@@ -21,12 +21,26 @@ const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const roles_enum_1 = require("../auth/enums/roles.enum");
 const get_user_decorator_1 = require("../auth/decorators/get-user.decorator");
 const user_entity_1 = require("../auth/user.entity");
+const review_dto_1 = require("./dto/review.dto");
+const platform_express_1 = require("@nestjs/platform-express");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getPlayerDetails(id) {
-        return this.usersService.getPlayerDetails(id);
+    getPlayerDetails(username) {
+        return this.usersService.getPlayerDetails(username);
+    }
+    addReview(username, reviewDto) {
+        return this.usersService.addReview(username, reviewDto);
+    }
+    editBio(username, body) {
+        return this.usersService.editBio(username, body.bio);
+    }
+    uploadProfilePicture(file, user) {
+        return this.usersService.uploadProfilePicture(file, user.id);
+    }
+    deleteProfilePicture(user) {
+        return this.usersService.deleteProfilePicture(user.id);
     }
     getUsersWithRoles(user) {
         return this.usersService.getUsersWithRoles(user);
@@ -43,6 +57,9 @@ let UsersController = class UsersController {
     deleteRoles(id) {
         return this.usersService.deleteUser(id);
     }
+    searchUser(username) {
+        return this.usersService.searchUser(username);
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -52,6 +69,38 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getPlayerDetails", null);
+__decorate([
+    (0, common_1.Post)('/player/review/:username'),
+    __param(0, (0, common_1.Param)('username')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, review_dto_1.ReviewDto]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "addReview", null);
+__decorate([
+    (0, common_1.Patch)('/player/bio/:username'),
+    __param(0, (0, common_1.Param)('username')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "editBio", null);
+__decorate([
+    (0, common_1.Post)('/player/picture'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, get_user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, user_entity_1.User]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "uploadProfilePicture", null);
+__decorate([
+    (0, common_1.Delete)('/player/picture'),
+    __param(0, (0, get_user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_entity_1.User]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteProfilePicture", null);
 __decorate([
     (0, roles_decorator_1.Roles)([roles_enum_1.Role.ADMIN]),
     (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
@@ -97,6 +146,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "deleteRoles", null);
+__decorate([
+    (0, common_1.Get)('/player/search/:username'),
+    __param(0, (0, common_1.Param)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "searchUser", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
     (0, common_1.Controller)('users'),

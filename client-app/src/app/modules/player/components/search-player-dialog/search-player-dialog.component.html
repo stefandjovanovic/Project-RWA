@@ -1,0 +1,27 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Search for a player</h2>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Search for a player</mat-label>
+      <input matInput
+             placeholder="username"
+             name="name"
+             [formControl]="searchControl"
+      >
+    </mat-form-field>
+
+    <h4 *ngIf="searchResult.length === 0">There are no results...</h4>
+    <div *ngFor="let player of searchResult" class="click" routerLinkActive="active" [routerLink]="['player', 'page', player.username]" (click)="onNoClick()">
+      <img [src]="player.profilePicture ? player.profilePicture : 'assets/player-avatar.png'"
+           class="avatar"
+           alt="avatar">
+      <span>{{ player.username }}</span>
+    </div>
+
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Close</button>
+  </mat-dialog-actions>
+</div>

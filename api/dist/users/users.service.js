@@ -22,19 +22,21 @@ const user_info_dto_1 = require("./dto/user-info.dto");
 const roles_enum_1 = require("../auth/enums/roles.enum");
 const player_details_entity_1 = require("./entities/player-details.entity");
 const manager_details_entity_1 = require("./entities/manager-details.entity");
+const review_dto_1 = require("./dto/review.dto");
+const review_entity_1 = require("./entities/review.entity");
+const cloudinary_service_1 = require("../cloudinary/cloudinary.service");
 let UsersService = class UsersService {
-    constructor(userRepository, playerDetailsRepository, managerDetailsRepository) {
+    constructor(userRepository, clodinaryService) {
         this.userRepository = userRepository;
-        this.playerDetailsRepository = playerDetailsRepository;
-        this.managerDetailsRepository = managerDetailsRepository;
+        this.clodinaryService = clodinaryService;
     }
-    async getPlayerDetails(id) {
-        const user = await this.userRepository.findOneBy({ id });
+    async getPlayerDetails(username) {
+        const user = await this.userRepository.findOneBy({ username });
         if (!user) {
-            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+            throw new common_1.NotFoundException(`User with ID ${username} not found`);
         }
         const playerDetails = new player_details_dto_1.PlayerDetailsDto();
-        playerDetails.playerId = user.id;
+        playerDetails.id = user.id;
         playerDetails.username = user.username;
         playerDetails.email = user.email;
         playerDetails.firstName = user.firstName;
@@ -42,7 +44,49 @@ let UsersService = class UsersService {
         playerDetails.address = user.address;
         playerDetails.bio = user.playerDetails.bio;
         playerDetails.profilePicture = user.playerDetails.profilePicture;
+        playerDetails.reviews = user.playerDetails.reviews.map(review => {
+            const reviewDto = new review_dto_1.ReviewDto();
+            reviewDto.comment = review.comment;
+            reviewDto.rating = review.rating;
+            reviewDto.username = review.username;
+            return reviewDto;
+        });
         return playerDetails;
+    }
+    async addReview(username, reviewDto) {
+        const user = await this.userRepository.findOneBy({ username });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with username ${username} not found`);
+        }
+        const review = new review_entity_1.Review();
+        review.comment = reviewDto.comment;
+        review.rating = reviewDto.rating;
+        review.username = reviewDto.username;
+        user.playerDetails.reviews.push(review);
+        review.user = user.playerDetails;
+        await this.userRepository.save(user);
+    }
+    async editBio(username, bio) {
+        const user = await this.userRepository.findOneBy({ username });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with username ${username} not found`);
+        }
+        user.playerDetails.bio = bio;
+        await this.userRepository.save(user);
+    }
+    async uploadProfilePicture(file, userId) {
+        const uploaded = await this.clodinaryService.uploadImage(file).catch(() => {
+            throw new common_1.BadRequestException('Invalid file');
+        });
+        const user = await this.userRepository.findOneBy({ id: userId });
+        user.playerDetails.profilePicture = uploaded.url;
+        await this.userRepository.save(user);
+        return { photoUrl: uploaded.url };
+    }
+    async deleteProfilePicture(userId) {
+        const user = await this.userRepository.findOneBy({ id: userId });
+        user.playerDetails.profilePicture = '';
+        await this.userRepository.save(user);
     }
     async getUsersWithRoles(appUser) {
         const users = await this.userRepository.find();
@@ -76,6 +120,7 @@ let UsersService = class UsersService {
                         user.playerDetails.bio = '';
                         user.playerDetails.profilePicture = '';
                         user.playerDetails.user = user;
+                        user.playerDetails.reviews = [];
                     }
                 }
                 break;
@@ -109,15 +154,35 @@ let UsersService = class UsersService {
         }
         await this.userRepository.remove(user);
     }
+    async searchUser(username) {
+        const users = await this.userRepository.find({
+            where: {
+                username: (0, typeorm_2.ILike)(`%${username}%`),
+                role: roles_enum_1.Role.PLAYER
+            }
+        });
+        if (users.length === 0) {
+            return [];
+        }
+        return users.map(user => {
+            const playerDetails = new player_details_dto_1.PlayerDetailsDto();
+            playerDetails.username = user.username;
+            playerDetails.email = user.email;
+            playerDetails.firstName = user.firstName;
+            playerDetails.lastName = user.lastName;
+            playerDetails.address = user.address;
+            playerDetails.id = user.id;
+            playerDetails.bio = user.playerDetails.bio;
+            playerDetails.profilePicture = user.playerDetails.profilePicture;
+            return playerDetails;
+        });
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
-    __param(1, (0, typeorm_1.InjectRepository)(player_details_entity_1.PlayerDetails)),
-    __param(2, (0, typeorm_1.InjectRepository)(manager_details_entity_1.ManagerDetails)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository,
-        typeorm_2.Repository])
+        cloudinary_service_1.CloudinaryService])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map

@@ -1,0 +1,31 @@
+<div class="dialog">
+  <h2 mat-dialog-title>Upload an image</h2>
+  <mat-dialog-content class="form">
+
+    <mat-progress-bar *ngIf="isUploading" mode="indeterminate"></mat-progress-bar>
+
+    <input #fileInput style="display: none" type="file" (change)="fileChangeEvent($event)" />
+
+    <button mat-stroked-button color="primary" (click)="fileInput.click()">Pick file</button>
+
+    <image-cropper
+      class="cropper"
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [cropperMinHeight]="200"
+      [cropperMinWidth]="200"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+    ></image-cropper>
+
+    <!--    <img class="cropper" [src]="croppedImage" />-->
+
+
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-stroked-button color="primary" class="cancel-button" (click)="onNoClick()">Cancel</button>
+    <button mat-flat-button color="primary" (click)="onSave()">Save</button>
+  </mat-dialog-actions>
+</div>

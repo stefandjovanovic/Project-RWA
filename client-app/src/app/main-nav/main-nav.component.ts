@@ -12,6 +12,10 @@ import {
   selectUsername
 } from "../modules/auth/store/auth/auth.selectors";
 import {logout} from "../modules/auth/store/auth/auth.actions";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  SearchPlayerDialogComponent
+} from "../modules/player/components/search-player-dialog/search-player-dialog.component";
 
 @Component({
   selector: 'app-main-nav',
@@ -26,7 +30,7 @@ export class MainNavComponent implements OnInit, OnDestroy{
   username?: string;
 
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private matDialog: MatDialog) {
   }
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -55,7 +59,7 @@ export class MainNavComponent implements OnInit, OnDestroy{
   }
 
   onSearchClick(){
-
+    this.matDialog.open(SearchPlayerDialogComponent);
   }
 
 }

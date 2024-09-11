@@ -14,6 +14,7 @@ const auth_module_1 = require("../auth/auth.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const player_details_entity_1 = require("./entities/player-details.entity");
 const manager_details_entity_1 = require("./entities/manager-details.entity");
+const cloudinary_module_1 = require("../cloudinary/cloudinary.module");
 let UsersModule = class UsersModule {
 };
 exports.UsersModule = UsersModule;
@@ -21,7 +22,8 @@ exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Module)({
         imports: [
             auth_module_1.AuthModule,
-            typeorm_1.TypeOrmModule.forFeature([player_details_entity_1.PlayerDetails, manager_details_entity_1.ManagerDetails])
+            typeorm_1.TypeOrmModule.forFeature([player_details_entity_1.PlayerDetails, manager_details_entity_1.ManagerDetails]),
+            cloudinary_module_1.CloudinaryModule
         ],
         providers: [users_service_1.UsersService],
         controllers: [users_controller_1.UsersController]

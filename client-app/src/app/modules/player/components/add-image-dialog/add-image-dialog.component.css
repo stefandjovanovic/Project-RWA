@@ -1,0 +1,17 @@
+.dialog {
+  min-width: 300px;
+
+}
+
+.cropper{
+  max-width: 600px;
+  max-height: 400px;
+  overflow: hidden;
+}
+.form{
+  overflow: hidden;
+}
+.cancel-button {
+  margin-left: 15px;
+  margin-right: 20px;
+}

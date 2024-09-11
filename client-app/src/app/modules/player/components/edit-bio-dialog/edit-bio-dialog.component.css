@@ -1,0 +1,8 @@
+.textarea{
+  min-width: 400px;
+  min-height: 100px;
+}
+.cancel-button{
+  margin-left: 15px;
+  margin-right: 20px;
+}

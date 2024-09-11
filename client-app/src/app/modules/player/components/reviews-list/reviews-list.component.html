@@ -1,0 +1,29 @@
+<h2 *ngIf="reviews.length === 0"><p class="no-reviews">There are no reviews.</p></h2>
+
+<div *ngIf="reviews.length > 0">
+  <mat-card-content class="form-parent">
+    <h3 class="review"><b>Reviews:</b></h3>
+    <hr class="separator-line">
+    <mat-card *ngFor="let review of reviews" class="form">
+      <mat-card-header class="card-header">
+        <div><b>{{ review.username }}</b></div>
+        <div class="score">
+          <mat-icon color="accent" *ngFor="let i of getStars(review.rating)">star</mat-icon>
+          <div class="margin-left"><b>{{ review.rating }}</b></div>
+        </div>
+      </mat-card-header>
+      <mat-card-content class="review-comment">
+        <p>{{ review.comment }}</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+</div>
+
+<mat-card-actions class="button-container">
+  <button mat-raised-button
+          *ngIf="!belongsToCurrentUser"
+          color="primary"
+          (click)="addReview()"
+          [disabled]="alreadyReviewed" class="button">Add review</button>
+
+</mat-card-actions>

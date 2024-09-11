@@ -1,5 +1,7 @@
+import { ReviewDto } from "./review.dto";
+
 export class PlayerDetailsDto{
-    playerId: string;
+    id: string;
     username: string;
     email: string;
     firstName: string;
@@ -7,4 +9,5 @@ export class PlayerDetailsDto{
     address: string;
     bio: string;
     profilePicture: string;
+    reviews: ReviewDto[]
 }
