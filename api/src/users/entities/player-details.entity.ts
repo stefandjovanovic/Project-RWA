@@ -1,6 +1,7 @@
 import { User } from "src/auth/user.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Review } from "./review.entity";
+import { Event } from "src/events/entities/event.entity";
 
 @Entity()
 export class PlayerDetails {
@@ -18,6 +19,12 @@ export class PlayerDetails {
 
   @OneToMany(() => Review, review => review.user, {eager: true, cascade: true})
   reviews: Review[];
+
+  @ManyToMany(() => Event, event => event.participants)
+  events: Event[];
+
+  @OneToMany(() => Event, event => event.owner)
+  ownEvents: Event[];
 
 
 }

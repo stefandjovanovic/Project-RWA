@@ -6,14 +6,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlayerDetails } from './entities/player-details.entity';
 import { ManagerDetails } from './entities/manager-details.entity';
 import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { EventsModule } from 'src/events/events.module';
 
 @Module({
   imports: [
     AuthModule,
     TypeOrmModule.forFeature([PlayerDetails, ManagerDetails],),
-    CloudinaryModule
+    CloudinaryModule,
+    EventsModule
   ],
   providers: [UsersService],
-  controllers: [UsersController]
+  controllers: [UsersController],
+  exports: [TypeOrmModule.forFeature([PlayerDetails, ManagerDetails])]
 })
 export class UsersModule {}
