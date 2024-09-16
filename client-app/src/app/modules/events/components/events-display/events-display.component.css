@@ -1,0 +1,27 @@
+.full-width{
+  width: 100%;
+}
+
+.margin-5 {
+  margin: 5px;
+}
+
+.center{
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+.center app-events-nearby {
+  align-self: flex-start; /* This will align the app-events-nearby component to the start */
+  padding-top: 20px;
+}
+.center app-events-map {
+  align-self: flex-start; /* This will align the app-map component to the end */
+  padding-top: 20px;
+}
+.center app-event-detail {
+  align-self: flex-start; /* This will align the app-event-detail component to the start */
+  padding-top: 40px;
+}
+

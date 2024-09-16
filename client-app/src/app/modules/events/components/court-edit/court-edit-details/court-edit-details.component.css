@@ -1,0 +1,41 @@
+form{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #E8E8E8;
+  border-radius: 10px;
+}
+
+.margin-10{
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.image-preview {
+  max-width: 95%; /* Set your desired width */
+  max-height: 85%;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.form-group {
+  width: 35rem;
+}
+.margin-top{
+  margin-top: 20px;
+}
+button{
+  margin: 20px;
+}
+.gray{
+  color: gray;
+}

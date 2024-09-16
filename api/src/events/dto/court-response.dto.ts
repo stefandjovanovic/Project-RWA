@@ -1,6 +1,8 @@
+import { Sport } from "../enums/sport.enum";
+
 export class CourtResponseDto {
     id: string;
-    sport: string;
+    sport: Sport;
     name: string;
     address: string;
     longitude: number;

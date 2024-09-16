@@ -1,0 +1,40 @@
+form{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+  background-color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+}
+
+.margin-10{
+  margin: 10px;
+}
+
+.image-preview {
+  max-width: 400px; /* Set your desired width */
+  max-height: 300px; /* Set your desired height */
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ccc;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.slider{
+  width: 95%;
+}
+.name{
+
+  text-align: center;
+}
+button{
+  margin-bottom: 20px;
+}

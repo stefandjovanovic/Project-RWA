@@ -20,6 +20,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {AuthInterceptorService} from "./modules/auth/services/auth-interceptor.service";
 import {AdminPanelEffects} from "./modules/auth/store/admin-panel/admin-panel.effects";
 import {PlayerPageEffects} from "./modules/player/store/player-page/player-page.effects";
+import {CourtsEffects} from "./modules/events/store/courts/courts.effects";
+import {HallsEffects} from "./modules/events/store/halls/halls.effects";
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import {PlayerPageEffects} from "./modules/player/store/player-page/player-page.
     EffectsModule.forRoot([
       AuthEffects,
       AdminPanelEffects,
-      PlayerPageEffects
+      PlayerPageEffects,
+      CourtsEffects,
+      HallsEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],

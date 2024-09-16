@@ -1,0 +1,34 @@
+form{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  border: 1px solid #E8E8E8;
+  border-radius: 10px;
+  background-color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.image-preview {
+  max-width: 400px; /* Set your desired width */
+  max-height: 300px; /* Set your desired height */
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ccc;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.slider{
+  width: 95%;
+}
+.margin-top{
+  margin-top: 20px;
+}
+.margin-bottom{
+  margin-bottom: 20px;
+}

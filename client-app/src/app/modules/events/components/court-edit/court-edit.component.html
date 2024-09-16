@@ -1,0 +1,23 @@
+<mat-grid-list cols="2" gutterSize="10px" rowHeight="1000px">
+  <mat-grid-tile colspan="1" rowspan="1">
+    <div class="vertical-list">
+      <div *ngFor="let court of courts">
+        <h4 class="margin-left">{{court.name}}</h4>
+        <div class="button-form">
+          <button mat-flat-button color="primary" (click)="onClickEdit(court)">Edit</button>
+          <button mat-stroked-button color="warn" (click)="onClickDelete(court)">Delete</button>
+
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="1" class="center">
+    <div>
+      <app-court-edit-details *ngIf="editMode" [selectedCourt]="selectedCourt" (editFinished)="editMode=false"></app-court-edit-details>
+
+    </div>
+
+  </mat-grid-tile>
+</mat-grid-list>

@@ -1,0 +1,43 @@
+.full-width{
+  width: 100%;
+}
+
+.margin-5 {
+  margin: 5px;
+}
+
+.center{
+  align-items: center;
+}
+
+.hallList{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: absolute;
+  top: 10%;
+  left: 25%;
+}
+
+.addButton{
+
+  margin-bottom: 30px;
+  margin-top: 0px;
+}
+.add-container {
+  display: flex;
+  align-items: baseline;
+  gap: 10px; /* Adjust as needed */
+}
+.add-container p {
+  margin: 0;
+  margin-left: 10px;
+  line-height: 1; /* Adjust as needed */
+  position: relative;
+  top: -3px; /* Adjust as needed */
+}
+.list{
+  width: 25rem;
+}

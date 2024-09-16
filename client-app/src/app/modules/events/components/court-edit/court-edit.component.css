@@ -1,0 +1,47 @@
+.vertical-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 60px;
+  border: 2px solid #E8E8E8;
+  overflow-y: auto;
+  height: 90vh;
+}
+
+.vertical-list > div {
+  width: 90%;
+  min-width: 25rem;
+  max-width: 30rem;
+  padding: 15px;
+  background-color: #ffffff;
+  border: 2px solid #E8E8E8;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.edit-details{
+  display: flex;
+  align-self: flex-start;
+  align-items: center;
+}
+
+.margin-left{
+  margin-left: 20px;
+}
+.button-form{
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  width: 90%;
+  margin: auto;
+  margin-bottom: 15px;
+}
+button{
+  border-radius: 5px;
+}

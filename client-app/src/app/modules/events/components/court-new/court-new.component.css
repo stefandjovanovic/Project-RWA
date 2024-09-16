@@ -1,0 +1,33 @@
+form{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border: 2px solid #E8E8E8;
+}
+
+.margin-10{
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
+  width: 25rem;
+}
+
+.image-preview {
+  max-width: 400px; /* Set your desired width */
+  max-height: 300px; /* Set your desired height */
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ccc;
+  margin: auto;
+}
+.button{
+  width: 95%;
+  margin: auto;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
