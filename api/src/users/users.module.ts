@@ -13,7 +13,7 @@ import { EventsModule } from 'src/events/events.module';
     AuthModule,
     TypeOrmModule.forFeature([PlayerDetails, ManagerDetails],),
     CloudinaryModule,
-    EventsModule
+    //EventsModule
   ],
   providers: [UsersService],
   controllers: [UsersController],

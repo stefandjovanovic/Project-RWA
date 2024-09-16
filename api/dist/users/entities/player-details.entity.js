@@ -13,6 +13,7 @@ exports.PlayerDetails = void 0;
 const user_entity_1 = require("../../auth/user.entity");
 const typeorm_1 = require("typeorm");
 const review_entity_1 = require("./review.entity");
+const event_entity_1 = require("../../events/entities/event.entity");
 let PlayerDetails = class PlayerDetails {
 };
 exports.PlayerDetails = PlayerDetails;
@@ -36,6 +37,14 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => review_entity_1.Review, review => review.user, { eager: true, cascade: true }),
     __metadata("design:type", Array)
 ], PlayerDetails.prototype, "reviews", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => event_entity_1.Event, event => event.participants),
+    __metadata("design:type", Array)
+], PlayerDetails.prototype, "events", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => event_entity_1.Event, event => event.owner),
+    __metadata("design:type", Array)
+], PlayerDetails.prototype, "ownEvents", void 0);
 exports.PlayerDetails = PlayerDetails = __decorate([
     (0, typeorm_1.Entity)()
 ], PlayerDetails);

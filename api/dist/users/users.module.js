@@ -23,10 +23,11 @@ exports.UsersModule = UsersModule = __decorate([
         imports: [
             auth_module_1.AuthModule,
             typeorm_1.TypeOrmModule.forFeature([player_details_entity_1.PlayerDetails, manager_details_entity_1.ManagerDetails]),
-            cloudinary_module_1.CloudinaryModule
+            cloudinary_module_1.CloudinaryModule,
         ],
         providers: [users_service_1.UsersService],
-        controllers: [users_controller_1.UsersController]
+        controllers: [users_controller_1.UsersController],
+        exports: [typeorm_1.TypeOrmModule.forFeature([player_details_entity_1.PlayerDetails, manager_details_entity_1.ManagerDetails])]
     })
 ], UsersModule);
 //# sourceMappingURL=users.module.js.map

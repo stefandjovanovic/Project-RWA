@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ManagerDetails = void 0;
 const user_entity_1 = require("../../auth/user.entity");
+const court_entity_1 = require("../../events/entities/court.entity");
 const typeorm_1 = require("typeorm");
 let ManagerDetails = class ManagerDetails {
 };
@@ -23,6 +24,10 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => user_entity_1.User, user => user.managerDetails, { eager: false }),
     __metadata("design:type", user_entity_1.User)
 ], ManagerDetails.prototype, "user", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => court_entity_1.Court, court => court.manager),
+    __metadata("design:type", Array)
+], ManagerDetails.prototype, "courts", void 0);
 exports.ManagerDetails = ManagerDetails = __decorate([
     (0, typeorm_1.Entity)()
 ], ManagerDetails);

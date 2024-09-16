@@ -15,12 +15,19 @@ const typeorm_config_1 = require("./config/typeorm.config");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
+const events_module_1 = require("./events/events.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeOrmConfig), auth_module_1.AuthModule, users_module_1.UsersModule, cloudinary_module_1.CloudinaryModule],
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeOrmConfig),
+            auth_module_1.AuthModule,
+            users_module_1.UsersModule,
+            cloudinary_module_1.CloudinaryModule,
+            events_module_1.EventsModule
+        ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })

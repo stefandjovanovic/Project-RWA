@@ -11,7 +11,7 @@ import { Court } from './entities/court.entity';
 @Module({
   controllers: [EventsController, CourtController],
   providers: [CourtService, EventsService],
-  imports: [AuthModule, UsersModule],
-  exports: [TypeOrmModule.forFeature([Court])],
+  imports: [AuthModule, UsersModule, TypeOrmModule.forFeature([Court, Event])],
+  exports: [TypeOrmModule.forFeature([Court, Event])],
 })
 export class EventsModule {}

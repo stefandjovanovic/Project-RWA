@@ -16,6 +16,8 @@ const jwt_1 = require("@nestjs/jwt");
 const passport_1 = require("@nestjs/passport");
 const jwt_strategy_1 = require("./jwt.strategy");
 const seed_service_1 = require("./seed.service");
+const config = require("config");
+const jwtConfig = config.get('jwt');
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -24,9 +26,9 @@ exports.AuthModule = AuthModule = __decorate([
         imports: [
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
             jwt_1.JwtModule.register({
-                secret: 'rwa-secret',
+                secret: process.env.JWT_SECRET || jwtConfig.secret,
                 signOptions: {
-                    expiresIn: 604800,
+                    expiresIn: jwtConfig.expiresIn,
                 },
             }),
             passport_1.PassportModule.register({
