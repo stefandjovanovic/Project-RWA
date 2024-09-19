@@ -12,5 +12,4 @@ export interface Court {
   pricePerHour: number;
   startTime: number;
   endTime: number;
-  toShow?: boolean;
 }

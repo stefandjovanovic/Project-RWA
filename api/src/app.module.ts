@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { EventsModule } from './events/events.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TeamsModule } from './teams/teams.module';
 import typeorm from './config/typeorm.config';
 
 @Module({
@@ -23,7 +24,7 @@ import typeorm from './config/typeorm.config';
       AuthModule,
       UsersModule,
       CloudinaryModule, 
-      EventsModule
+      EventsModule, TeamsModule
     ],
   controllers: [AppController],
   providers: [AppService],

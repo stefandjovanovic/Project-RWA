@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", user_entity_1.User)
 ], ManagerDetails.prototype, "user", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => court_entity_1.Court, court => court.manager),
+    (0, typeorm_1.OneToMany)(() => court_entity_1.Court, court => court.manager),
     __metadata("design:type", Array)
 ], ManagerDetails.prototype, "courts", void 0);
 exports.ManagerDetails = ManagerDetails = __decorate([

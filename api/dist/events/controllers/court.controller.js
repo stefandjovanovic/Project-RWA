@@ -23,7 +23,6 @@ const roles_enum_1 = require("../../auth/enums/roles.enum");
 const get_user_decorator_1 = require("../../auth/decorators/get-user.decorator");
 const user_entity_1 = require("../../auth/user.entity");
 const hall_create_dto_1 = require("../dto/hall-create.dto");
-const get_scheduled_slots_dto_1 = require("../dto/get-scheduled-slots.dto");
 let CourtController = class CourtController {
     constructor(courtService) {
         this.courtService = courtService;
@@ -50,10 +49,10 @@ let CourtController = class CourtController {
         return this.courtService.getAllCourts();
     }
     getMyHalls(user) {
-        return this.courtService.getMyHalls(user.managerDetails);
+        return this.courtService.getMyHalls(user.managerDetails.id);
     }
-    getScheduledSlots(getScheduledSlotsDto) {
-        return this.courtService.getScheduledSlots(getScheduledSlotsDto);
+    getScheduledSlots(id, date) {
+        return this.courtService.getScheduledSlots(id, date);
     }
 };
 exports.CourtController = CourtController;
@@ -130,10 +129,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], CourtController.prototype, "getMyHalls", null);
 __decorate([
-    (0, common_1.Get)('/scheduled-slots'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Get)('/scheduled-slots/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Query)('date')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [get_scheduled_slots_dto_1.GetScheduledSlotsDto]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], CourtController.prototype, "getScheduledSlots", null);
 exports.CourtController = CourtController = __decorate([

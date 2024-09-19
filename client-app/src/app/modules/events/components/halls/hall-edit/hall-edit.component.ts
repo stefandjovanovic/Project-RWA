@@ -14,7 +14,7 @@ import {HallsService} from "../../../services/halls.service";
   styleUrl: './hall-edit.component.css'
 })
 export class HallEditComponent implements OnChanges, OnInit, OnDestroy{
-  @Output() hallEdited = new EventEmitter<boolean>();
+  @Output() hallEdited = new EventEmitter<string>();
   @Input() selectedHall?: Court;
 
   isLoading?: Observable<boolean>;
@@ -32,8 +32,11 @@ export class HallEditComponent implements OnChanges, OnInit, OnDestroy{
 
   ngOnInit() {
     this.isLoading = this.store.select(HallsSelectors.selectHallsLoading);
-    this.updatedSub = this.hallsService.successfullyUpdated.subscribe(() => {
-      this.hallEdited.emit(true);
+    this.updatedSub = this.hallsService.successfullyUpdated.subscribe({
+      next: (value) => {
+        this.hallEdited.emit('over');
+        console.log("Hall updated");
+      }
     });
   }
 

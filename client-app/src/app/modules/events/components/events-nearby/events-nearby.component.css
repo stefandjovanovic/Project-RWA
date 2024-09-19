@@ -1,0 +1,41 @@
+.width{
+  width:90%;
+  position: relative;
+
+}
+:host{
+  display: block;
+  width: 100%;
+}
+.center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 40px;
+}
+.form{
+  background-color: #FFFFFF;
+  border-color: #F5F5F5;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+.button {
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.list-container{
+  overflow-y: auto;
+  max-height: 70vh;
+
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.list-container::-webkit-scrollbar {
+  width: 0px;
+}

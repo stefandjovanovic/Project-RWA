@@ -1,6 +1,6 @@
 import { User } from "src/auth/user.entity";
 import { Court } from "src/events/entities/court.entity";
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class ManagerDetails {
@@ -10,7 +10,7 @@ export class ManagerDetails {
   @OneToOne(() => User, user => user.managerDetails, {eager: false})
   user: User;
 
-  @ManyToOne(() => Court, court => court.manager)
+  @OneToMany(() => Court, court => court.manager)
   courts: Court[];
   
 }

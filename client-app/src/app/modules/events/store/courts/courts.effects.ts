@@ -3,13 +3,13 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {CourtsService} from "../../services/courts.service";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../store/app.reducer";
-import {exhaustMap, map} from "rxjs/operators";
-import {of, switchMap, tap} from "rxjs";
+import {map} from "rxjs/operators";
+import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import * as CourtsActions from "./courts.actions";
-import {loadCourts} from "./courts.actions";
 import {GeocodingService} from "../../services/geocoding.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {selectCourts} from "./courts.selectors";
 
 
 @Injectable()
@@ -19,13 +19,18 @@ export class CourtsEffects{
     private courtsService: CourtsService,
     private geoCodingService: GeocodingService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   loadCourts = createEffect(() =>
     this.actions$.pipe(
       ofType(CourtsActions.loadCourts),
-      switchMap(() => {
+      withLatestFrom(this.store.select(selectCourts)),
+      switchMap(([actionData, loadedPlayers]) => {
+        if (loadedPlayers.length > 0) {
+          return of();
+        }
         return this.courtsService.getAllCourts().pipe(
           map(courts => {
             return CourtsActions.courtsLoaded({courts});
@@ -59,6 +64,10 @@ export class CourtsEffects{
               return CourtsActions.courtCreateSuccess({court});
             })
           );
+        }),
+        catchError(error => {
+          console.log(error);
+          return of(CourtsActions.courtUpdateFailure({error}));
         })
       );
     })
@@ -88,6 +97,10 @@ export class CourtsEffects{
                 return CourtsActions.courtUpdateSuccess({court});
               })
             );
+          }),
+          catchError(error => {
+            console.log(error);
+            return of(CourtsActions.courtUpdateFailure({error}));
           })
         );
       })
@@ -116,5 +129,16 @@ export class CourtsEffects{
         });
         this.router.navigate(['/events']);
       })
-    ),{dispatch: false})
+    ),{dispatch: false});
+
+  courtsUpdated = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourtsActions.courtUpdateSuccess),
+      tap(() => {
+        this.snackBar.open('Court updated successfully', 'Close', {
+          duration: 3000
+        });
+        this.courtsService.successfullyUpdated.next(true);
+      })
+    ),{dispatch: false});
 }

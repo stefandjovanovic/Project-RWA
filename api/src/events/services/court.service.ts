@@ -52,7 +52,7 @@ export class CourtService {
             endTime: newCourt.endTime,
             image: newCourt.image,
             isHall: newCourt.isHall,
-            pricePerHour: newCourt.pricePerHour
+            pricePerHour: newCourt.pricePerHour,
         };
     }
 
@@ -85,7 +85,7 @@ export class CourtService {
             endTime: updatedCourt.endTime,
             image: updatedCourt.image,
             isHall: updatedCourt.isHall,
-            pricePerHour: updatedCourt.pricePerHour
+            pricePerHour: updatedCourt.pricePerHour,
         }
     }
 
@@ -119,6 +119,9 @@ export class CourtService {
         court.manager = manager;
         court.events = [];
         court.timeSlots = [];
+        if (!manager.courts) {
+            manager.courts = [];
+        }
         manager.courts.push(court);
 
         const newCourt = await this.courtRepository.save(court);
@@ -134,7 +137,7 @@ export class CourtService {
             endTime: newCourt.endTime,
             image: newCourt.image,
             isHall: newCourt.isHall,
-            pricePerHour: newCourt.pricePerHour
+            pricePerHour: newCourt.pricePerHour,
         };
     }
 
@@ -170,7 +173,7 @@ export class CourtService {
             endTime: updatedCourt.endTime,
             image: updatedCourt.image,
             isHall: updatedCourt.isHall,
-            pricePerHour: updatedCourt.pricePerHour
+            pricePerHour: updatedCourt.pricePerHour,
         }
     }
 
@@ -206,7 +209,17 @@ export class CourtService {
         });
     }
 
-    async getMyHalls(manager: ManagerDetails): Promise<CourtResponseDto[]> {
+    async getMyHalls(managerId: string): Promise<CourtResponseDto[]> {
+        const manager = await this.managerDetailsRepository.findOne({
+            where: {id: managerId},
+            relations: ['courts']
+        });
+        if (!manager) {
+            throw new Error('Manager not found');
+        }
+        if (!manager.courts) {
+            return [];
+        }
         const courts = manager.courts;
         return courts.map(court => {
             return {
@@ -225,19 +238,29 @@ export class CourtService {
         });
     }
 
-    async getScheduledSlots(getScheduledSlotsDto: GetScheduledSlotsDto): Promise<ScheduledSlotsDto> {
-        const court = await this.courtRepository.findOneBy({id: getScheduledSlotsDto.courtId});
+    async getScheduledSlots(id: string, dateString: string): Promise<ScheduledSlotsDto> {
+        const court = await this.courtRepository.findOne({
+            where: {id: id},
+            relations: ['timeSlots']
+        });
         if (!court) {
             throw new Error('Court not found');
         }
 
+        const date: Date = new Date(dateString);
+        date.setUTCHours(0, 0, 0, 0);
+        
+        console.log(date);
+
         const timeSlots = court.timeSlots.filter(timeSlot => {
-            return timeSlot.date === getScheduledSlotsDto.date;
+            const timeSlotDate = new Date(timeSlot.date);
+            timeSlotDate.setUTCHours(0, 0, 0, 0);
+
+            console.log(timeSlotDate);
+            return (timeSlotDate.getDate === date.getDate && timeSlotDate.getMonth === date.getMonth && timeSlotDate.getFullYear === date.getFullYear);
         });
 
-        const events = timeSlots.map(timeSlot => {
-            return timeSlot.event;
-        });
+        console.log(timeSlots);
 
         return {
             slots: timeSlots.map(timeSlot => {

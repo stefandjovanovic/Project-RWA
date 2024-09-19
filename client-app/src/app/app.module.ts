@@ -22,6 +22,8 @@ import {AdminPanelEffects} from "./modules/auth/store/admin-panel/admin-panel.ef
 import {PlayerPageEffects} from "./modules/player/store/player-page/player-page.effects";
 import {CourtsEffects} from "./modules/events/store/courts/courts.effects";
 import {HallsEffects} from "./modules/events/store/halls/halls.effects";
+import {EventsEffects} from "./modules/events/store/events/events.effects";
+import {NearbyEventsEffects} from "./modules/events/store/nearby-events/nearby-events.effects";
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import {HallsEffects} from "./modules/events/store/halls/halls.effects";
       AdminPanelEffects,
       PlayerPageEffects,
       CourtsEffects,
-      HallsEffects
+      HallsEffects,
+      EventsEffects,
+      NearbyEventsEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],

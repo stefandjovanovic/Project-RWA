@@ -51,12 +51,12 @@ __decorate([
     __metadata("design:type", Number)
 ], Event.prototype, "price", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => player_details_entity_1.PlayerDetails, player => player.ownEvents, { cascade: true }),
+    (0, typeorm_1.ManyToOne)(() => player_details_entity_1.PlayerDetails, player => player.ownEvents),
     __metadata("design:type", player_details_entity_1.PlayerDetails)
 ], Event.prototype, "owner", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => player_details_entity_1.PlayerDetails, player => player.events, { cascade: true }),
-    (0, typeorm_1.JoinColumn)(),
+    (0, typeorm_1.ManyToMany)(() => player_details_entity_1.PlayerDetails, player => player.events),
+    (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Event.prototype, "participants", void 0);
 __decorate([
@@ -65,6 +65,7 @@ __decorate([
 ], Event.prototype, "court", void 0);
 __decorate([
     (0, typeorm_1.OneToOne)(() => time_slot_entity_1.TimeSlot, timeSlot => timeSlot.event, { cascade: true }),
+    (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", time_slot_entity_1.TimeSlot)
 ], Event.prototype, "timeSlot", void 0);
 __decorate([

@@ -14,7 +14,7 @@ import {NgForm} from "@angular/forms";
 })
 export class HallNewComponent implements OnInit, OnDestroy{
 
-  @Output() hallCreated = new EventEmitter<boolean>();
+  @Output() hallCreated = new EventEmitter<string>();
 
   isLoading?: Observable<boolean>;
 
@@ -27,8 +27,8 @@ export class HallNewComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.isLoading = this.store.select(HallsSelectors.selectHallsLoading);
-    this.hallsSub = this.hallsService.successfullyUpdated.subscribe(() => {
-      this.hallCreated.emit(true);
+    this.hallsSub = this.hallsService.successfullyUpdated.subscribe((value) => {
+      this.hallCreated.emit('over');
     });
   }
 

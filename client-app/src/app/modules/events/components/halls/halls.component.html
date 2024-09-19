@@ -13,8 +13,8 @@
   </mat-grid-tile>
 
   <mat-grid-tile class="center">
-    <app-hall-new *ngIf="showNewHallForm" (hallCreated)="onHallCreated()"></app-hall-new>
-    <app-hall-edit *ngIf="showEditHallForm" [selectedHall]="hallToEdit" (hallEdited)="onHallEdited()"></app-hall-edit>
+    <app-hall-new *ngIf="showNewHallForm" (hallCreated)="showNewHallForm=false"></app-hall-new>
+    <app-hall-edit *ngIf="showEditHallForm" [selectedHall]="hallToEdit" (hallEdited)="showEditHallForm=false"></app-hall-edit>
     <app-hall-events-list *ngIf="showEventsList" [hallId]="hallToShowId"></app-hall-events-list>
   </mat-grid-tile>
 

@@ -46,7 +46,7 @@ export class EventsController {
     @UseGuards(RolesGuard)
     @Post('/join/:id')
     joinEvent(@Param('id') id: string, @GetUser() user: User): Promise<void> {
-        return this.eventsService.joinEvent(id, user.playerDetails);
+        return this.eventsService.joinEvent(id, user.playerDetails.id);
     }
 
     @Roles([Role.PLAYER])
@@ -54,6 +54,13 @@ export class EventsController {
     @Post('/leave/:id')
     leaveEvent(@Param('id') id: string, @GetUser() user: User): Promise<void> {
         return this.eventsService.leaveEvent(id, user.playerDetails.id);
+    }
+
+    @Roles([Role.PLAYER])
+    @UseGuards(RolesGuard)
+    @Get('/nearby/:longitude/:latitude')
+    getNearbyEvents(@Param('longitude') longitude: number, @Param('latitude') latitude: number): Promise<EventDto[]> {
+        return this.eventsService.getNearbyEvents(longitude, latitude);
     }
 
 

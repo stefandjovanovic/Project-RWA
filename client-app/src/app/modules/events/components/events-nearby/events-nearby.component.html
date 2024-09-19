@@ -1,1 +1,29 @@
-<p>events-nearby works!</p>
+<div class="center">
+  <h3><strong>Nearby Events:</strong></h3>
+  <h4 *ngIf="!(validAddress | async)">User address is not valid</h4>
+  <h4 *ngIf="(validAddress | async) && eventList.length===0">There are no nearby events...</h4>
+</div>
+
+
+<div class="list-container">
+  <div *ngFor="let event of eventList" class="center">
+    <mat-card class="width form">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>{{event.sport}}</mat-card-title>
+          <!--          <img mat-card-sm-image src="{{event.imageUrl}}" alt="#">-->
+          <img *ngIf="event.court.image && event.court.image !== ''" mat-card-avatar src="{{event.court.image}}" alt="#">
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        <p><b>Court name:</b> {{event.court.name}}</p>
+        <p><b>Date:</b> {{event.date | date}}</p>
+        <p><b>Time:</b> {{event.startTime}}:00 - {{event.endTime}}:00</p>
+        <p><b>Number of players remaining:</b> {{event.maxParticipants - event.participants.length}}</p>
+        <button mat-raised-button color="primary" (click)="quickJoinEvent(event.id)" class="button">Quick Join</button>
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+
+</div>

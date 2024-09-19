@@ -121,6 +121,8 @@ let UsersService = class UsersService {
                         user.playerDetails.profilePicture = '';
                         user.playerDetails.user = user;
                         user.playerDetails.reviews = [];
+                        user.playerDetails.events = [];
+                        user.playerDetails.ownEvents = [];
                     }
                 }
                 break;
@@ -135,6 +137,7 @@ let UsersService = class UsersService {
                     if (!user.managerDetails) {
                         user.managerDetails = new manager_details_entity_1.ManagerDetails();
                         user.managerDetails.user = user;
+                        user.managerDetails.courts = [];
                     }
                 }
                 break;

@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {HallsService} from "../../services/halls.service";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
@@ -118,6 +117,7 @@ export class HallsEffects{
           duration: 3000
         });
         //this.router.navigate(['/manager/halls']);
+        this.hallsService.successfullyUpdated.next(true);
       })
     ),
     {dispatch: false}
@@ -127,10 +127,10 @@ export class HallsEffects{
     this.actions$.pipe(
       ofType(HallsActions.hallUpdateSuccess),
       tap(() => {
+        this.hallsService.successfullyUpdated.next(true);
         this.snackBar.open('Hall updated successfully', 'Close', {
           duration: 3000
         });
-        this.hallsService.successfullyUpdated.next(true);
       })
     ),
     {dispatch: false}

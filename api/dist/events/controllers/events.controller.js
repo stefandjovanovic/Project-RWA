@@ -39,10 +39,13 @@ let EventsController = class EventsController {
         return this.eventsService.getMyEvents(user.playerDetails);
     }
     joinEvent(id, user) {
-        return this.eventsService.joinEvent(id, user.playerDetails);
+        return this.eventsService.joinEvent(id, user.playerDetails.id);
     }
     leaveEvent(id, user) {
         return this.eventsService.leaveEvent(id, user.playerDetails.id);
+    }
+    getNearbyEvents(longitude, latitude) {
+        return this.eventsService.getNearbyEvents(longitude, latitude);
     }
 };
 exports.EventsController = EventsController;
@@ -104,6 +107,16 @@ __decorate([
     __metadata("design:paramtypes", [String, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "leaveEvent", null);
+__decorate([
+    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
+    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
+    (0, common_1.Get)('/nearby/:longitude/:latitude'),
+    __param(0, (0, common_1.Param)('longitude')),
+    __param(1, (0, common_1.Param)('latitude')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "getNearbyEvents", null);
 exports.EventsController = EventsController = __decorate([
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
     (0, common_1.Controller)('events'),

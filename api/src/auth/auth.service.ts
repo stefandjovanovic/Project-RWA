@@ -37,6 +37,8 @@ export class AuthService {
         user.playerDetails.profilePicture = "";
         user.playerDetails.user = user;
         user.playerDetails.reviews = [];
+        user.playerDetails.events = [];
+        user.playerDetails.ownEvents = [];
         user.managerDetails = null;
         user.password = await bcrypt.hash(signUpCredentialsDto.password, salt);
 

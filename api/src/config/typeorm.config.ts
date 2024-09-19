@@ -21,5 +21,5 @@ export const typeOrmConfig: TypeOrmModule = {
     //synchronize: false
 }
 
-export default registerAs('typeorm', () => config)
+export default registerAs('typeorm', () => typeOrmConfig)
 export const connectionSource = new DataSource(typeOrmConfig as DataSourceOptions);

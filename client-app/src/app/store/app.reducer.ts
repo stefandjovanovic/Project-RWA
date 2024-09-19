@@ -4,6 +4,8 @@ import * as fromAdminPanel from "../modules/auth/store/admin-panel/admin-panel.r
 import * as fromPlayerPage from "../modules/player/store/player-page/player-page.reducer";
 import * as fromCourts from "../modules/events/store/courts/courts.reducer";
 import * as fromHalls from "../modules/events/store/halls/halls.reducer";
+import * as fromEvents from "../modules/events/store/events/events.reducer";
+import * as fromNearbyEvents from "../modules/events/store/nearby-events/nearby-events.reducer";
 
 export interface AppState{
   auth: fromAuth.State;
@@ -11,6 +13,8 @@ export interface AppState{
   playerPage: fromPlayerPage.State;
   courts: fromCourts.State;
   halls: fromHalls.State;
+  events: fromEvents.State;
+  nearbyEvents: fromNearbyEvents.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -18,5 +22,7 @@ export const appReducer: ActionReducerMap<AppState> = {
   adminPanel: fromAdminPanel.adminPanelReducer,
   playerPage: fromPlayerPage.playerPageReducer,
   courts: fromCourts.courtsReducer,
-  halls: fromHalls.hallsReducer
+  halls: fromHalls.hallsReducer,
+  events: fromEvents.eventReducer,
+  nearbyEvents: fromNearbyEvents.reducer
 }

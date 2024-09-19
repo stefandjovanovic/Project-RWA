@@ -17,12 +17,14 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const Entities = require("../entities/event.entity");
+const player_details_entity_1 = require("../../users/entities/player-details.entity");
 const court_entity_1 = require("../entities/court.entity");
 const time_slot_entity_1 = require("../entities/time-slot.entity");
 let EventsService = class EventsService {
-    constructor(eventRepository, courtRepository) {
+    constructor(eventRepository, courtRepository, playerRepository) {
         this.eventRepository = eventRepository;
         this.courtRepository = courtRepository;
+        this.playerRepository = playerRepository;
     }
     async createPublicEvent(eventCreateDto, player) {
         const event = new Entities.Event();
@@ -35,13 +37,20 @@ let EventsService = class EventsService {
         event.date = eventCreateDto.date;
         event.price = eventCreateDto.price;
         event.private = false;
-        event.owner = player;
-        player.ownEvents.push(event);
-        const court = await this.courtRepository.findOneBy({ id: eventCreateDto.courtId });
+        const owner = await this.playerRepository.findOne({
+            where: { id: player.id },
+            relations: ['ownEvents', 'events', 'user']
+        });
+        event.owner = owner;
+        owner.ownEvents.push(event);
+        const court = await this.courtRepository.findOne({
+            where: { id: eventCreateDto.courtId },
+            relations: ['events', 'timeSlots']
+        });
         event.court = court;
         court.events.push(event);
-        event.participants = [player];
-        player.events.push(event);
+        event.participants = [owner];
+        owner.events.push(event);
         const timeSlot = new time_slot_entity_1.TimeSlot();
         timeSlot.startTime = eventCreateDto.startTime;
         timeSlot.endTime = eventCreateDto.endTime;
@@ -50,6 +59,7 @@ let EventsService = class EventsService {
         court.timeSlots.push(timeSlot);
         timeSlot.event = event;
         event.timeSlot = timeSlot;
+        await this.playerRepository.save(owner);
         const newEvent = await this.eventRepository.save(event);
         return {
             id: newEvent.id,
@@ -62,7 +72,8 @@ let EventsService = class EventsService {
             price: newEvent.price,
             startTime: newEvent.timeSlot.startTime,
             endTime: newEvent.timeSlot.endTime,
-            pariticipants: newEvent.participants.map(p => p.user.username),
+            eventOwnerUsername: newEvent.owner.user.username,
+            participants: newEvent.participants.map(p => p.user.username),
             court: {
                 name: newEvent.court.name,
                 address: newEvent.court.address,
@@ -84,13 +95,28 @@ let EventsService = class EventsService {
     }
     async getPublicEvents(courtId) {
         const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
+        currentDate.setUTCHours(0, 0, 0, 0);
         const events = await this.eventRepository.find({ where: {
                 court: { id: courtId },
                 private: false,
                 date: (0, typeorm_2.MoreThanOrEqual)(currentDate)
-            } });
-        return events.map(event => {
+            },
+            relations: {
+                participants: true,
+                court: true,
+                owner: true,
+                timeSlot: true
+            }
+        });
+        const eventDtos = await Promise.all(events.map(async (event) => {
+            const owner = await this.playerRepository.findOne({
+                where: { id: event.owner.id },
+                relations: ['user']
+            });
+            const participants = await this.playerRepository.find({
+                where: { events: { id: event.id } },
+                relations: ['user']
+            });
             return {
                 id: event.id,
                 title: event.title,
@@ -102,7 +128,8 @@ let EventsService = class EventsService {
                 price: event.price,
                 startTime: event.timeSlot.startTime,
                 endTime: event.timeSlot.endTime,
-                pariticipants: event.participants.map(p => p.user.username),
+                eventOwnerUsername: owner.user.username,
+                participants: participants.map(p => p.user.username),
                 court: {
                     name: event.court.name,
                     address: event.court.address,
@@ -111,10 +138,18 @@ let EventsService = class EventsService {
                     image: event.court.image
                 }
             };
-        });
+        }));
+        return eventDtos;
     }
-    async joinEvent(eventId, player) {
-        const event = await this.eventRepository.findOneBy({ id: eventId });
+    async joinEvent(eventId, playerId) {
+        const event = await this.eventRepository.findOne({
+            where: { id: eventId },
+            relations: ['participants', 'owner']
+        });
+        const player = await this.playerRepository.findOne({
+            where: { id: playerId },
+            relations: ['events']
+        });
         if (!event) {
             throw new Error('Event not found');
         }
@@ -130,7 +165,10 @@ let EventsService = class EventsService {
         await this.eventRepository.save(event);
     }
     async leaveEvent(eventId, playerId) {
-        const event = await this.eventRepository.findOneBy({ id: eventId });
+        const event = await this.eventRepository.findOne({
+            where: { id: eventId },
+            relations: ['participants', 'owner', 'participants.events']
+        });
         if (!event) {
             throw new Error('Event not found');
         }
@@ -147,7 +185,10 @@ let EventsService = class EventsService {
         await this.eventRepository.save(event);
     }
     async getMyEvents(player) {
-        const events = player.events;
+        const events = await this.eventRepository.find({
+            where: { participants: { id: player.id } },
+            relations: ['participants', 'court', 'owner', 'timeSlot']
+        });
         return events.map(event => {
             return {
                 id: event.id,
@@ -160,7 +201,8 @@ let EventsService = class EventsService {
                 price: event.price,
                 startTime: event.timeSlot.startTime,
                 endTime: event.timeSlot.endTime,
-                pariticipants: event.participants.map(p => p.user.username),
+                eventOwnerUsername: event.owner.user.username,
+                participants: event.participants.map(p => p.user.username),
                 court: {
                     name: event.court.name,
                     address: event.court.address,
@@ -171,13 +213,90 @@ let EventsService = class EventsService {
             };
         });
     }
+    async getNearbyEvents(userLongitude, userLatitude) {
+        const allCourts = await this.courtRepository.find({ relations: ['events', 'events.court', 'events.timeSlot', 'events.owner', 'events.participants'] });
+        const nearbyCourts = allCourts.filter(court => {
+            const distance = this.getDistanceInMeters(userLatitude, userLongitude, court.latitude, court.longitude);
+            return distance <= 1500;
+        });
+        const nearbyEvents = [];
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+        nearbyCourts.forEach(court => {
+            court.events.forEach((event) => {
+                const eventDate = event.date;
+                eventDate.setUTCHours(0, 0, 0, 0);
+                if (eventDate < today) {
+                    return;
+                }
+                if (eventDate.getDate() === today.getDate()
+                    && eventDate.getMonth() === today.getMonth()
+                    && eventDate.getFullYear() === today.getFullYear()
+                    && event.timeSlot.startTime < todayHours) {
+                    return;
+                }
+                if (event.numOfParticipants >= event.maxParticipants) {
+                    return;
+                }
+                nearbyEvents.push(event);
+            });
+        });
+        const eventDtos = await Promise.all(nearbyEvents.map(async (event) => {
+            const owner = await this.playerRepository.findOne({
+                where: { id: event.owner.id },
+                relations: ['user']
+            });
+            const participants = await this.playerRepository.find({
+                where: { events: { id: event.id } },
+                relations: ['user']
+            });
+            return {
+                id: event.id,
+                title: event.title,
+                description: event.description,
+                date: event.date,
+                sport: event.sport,
+                numOfParticipants: event.numOfParticipants,
+                maxParticipants: event.maxParticipants,
+                price: event.price,
+                startTime: event.timeSlot.startTime,
+                endTime: event.timeSlot.endTime,
+                eventOwnerUsername: owner.user.username,
+                participants: participants.map(p => p.user.username),
+                court: {
+                    name: event.court.name,
+                    address: event.court.address,
+                    longitude: event.court.longitude,
+                    latitude: event.court.latitude,
+                    image: event.court.image
+                }
+            };
+        }));
+        return eventDtos;
+    }
+    getDistanceInMeters(lat1, lon1, lat2, lon2) {
+        let dLat = (lat2 - lat1) * Math.PI / 180.0;
+        let dLon = (lon2 - lon1) * Math.PI / 180.0;
+        lat1 = (lat1) * Math.PI / 180.0;
+        lat2 = (lat2) * Math.PI / 180.0;
+        let a = Math.pow(Math.sin(dLat / 2), 2) +
+            Math.pow(Math.sin(dLon / 2), 2) *
+                Math.cos(lat1) *
+                Math.cos(lat2);
+        let rad = 6371;
+        let c = 2 * Math.asin(Math.sqrt(a));
+        return rad * c * 1000;
+    }
 };
 exports.EventsService = EventsService;
 exports.EventsService = EventsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(Entities.Event)),
     __param(1, (0, typeorm_1.InjectRepository)(court_entity_1.Court)),
+    __param(2, (0, typeorm_1.InjectRepository)(player_details_entity_1.PlayerDetails)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], EventsService);
 //# sourceMappingURL=events.service.js.map

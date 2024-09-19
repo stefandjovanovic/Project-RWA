@@ -21,7 +21,7 @@ export const courtsReducer = createReducer(
     return adapter.setAll(action.courts, {... state, error: null, isLoading: false});
   }),
   on(CourtsActions.loadCourts, (state) => {
-    return {... state, isLoading: true};
+    return {... state, error: null};
   }),
   on(CourtsActions.createCourt, (state) => {
     return {... state, isLoading: true};

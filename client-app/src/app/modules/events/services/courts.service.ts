@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CourtCreate} from "../interfaces/court-create.interface";
 import {Court} from "../interfaces/court.interface";
+import {Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourtsService {
-
   baseUrl = 'http://localhost:3000/court';
+  successfullyUpdated: Subject<boolean> = new Subject<boolean>();
+  courtSelected: EventEmitter<Court> = new EventEmitter<Court>();
 
   constructor(private http: HttpClient) { }
 

@@ -135,6 +135,8 @@ export class UsersService {
                     user.playerDetails.profilePicture = '';
                     user.playerDetails.user = user;
                     user.playerDetails.reviews = [];
+                    user.playerDetails.events = [];
+                    user.playerDetails.ownEvents = [];
                 }
             }
             break;
@@ -147,6 +149,8 @@ export class UsersService {
                 if(!user.managerDetails){
                     user.managerDetails = new ManagerDetails();
                     user.managerDetails.user = user;
+                    
+                    user.managerDetails.courts = [];
                 }
             }
             break;

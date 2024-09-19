@@ -7,6 +7,7 @@ import {AppState} from "../../../../store/app.reducer";
 import * as CourtsSelectors from "../../store/courts/courts.selectors";
 import * as CourtsActions from "../../store/courts/courts.actions";
 import * as AuthSelectors from "../../../auth/store/auth/auth.selectors";
+import {CourtsService} from "../../services/courts.service";
 
 
 @Component({
@@ -18,6 +19,7 @@ export class EventsMapComponent implements OnInit, OnDestroy{
   map: Map | undefined;
 
   courts: Court[] = [];
+  showingCourts: boolean[] = [];
   storeSubscription?: Subscription;
   selectedSport: string = 'all';
   selectedCourt: string = 'all';
@@ -27,15 +29,18 @@ export class EventsMapComponent implements OnInit, OnDestroy{
 
   role?: Observable<string>
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>, private courtsService: CourtsService) {}
 
   ngOnInit() {
     this.storeSubscription = this.store.select(CourtsSelectors.selectCourts).subscribe(courts => {
       this.courts = courts;
+      this.showingCourts = new Array(courts.length).fill(true);
+      this.onShowChanged();
     });
     this.role = this.store.select(AuthSelectors.selectRole);
     this.store.dispatch(CourtsActions.loadCourts());
-    this.onShowChanged();
+
+
   }
 
   ngOnDestroy() {
@@ -57,25 +62,25 @@ export class EventsMapComponent implements OnInit, OnDestroy{
   }
 
   onShowChanged(){
-    this.courts.forEach(court => {
+    this.courts.forEach((court, index) => {
       if(this.selectedSport==='all' && this.selectedCourt==='all'){
-        court.toShow = true;
-      }else if(this.selectedSport!=='all' &&this.selectedCourt==='all'){
-        court.toShow = court.sport === this.selectedSport;
+        this.showingCourts[index] = true;
+      }else if(this.selectedSport!=='all' && this.selectedCourt==='all'){
+        this.showingCourts[index] = court.sport === this.selectedSport;
       }else if(this.selectedSport!=='all' && this.selectedCourt==='hall'){
-        court.toShow = court.sport === this.selectedSport && court.isHall;
+        this.showingCourts[index] = court.sport === this.selectedSport && court.isHall;
       }else if(this.selectedSport!=='all' &&this.selectedCourt==='street'){
-        court.toShow = court.sport === this.selectedSport && !court.isHall;
+        this.showingCourts[index] = court.sport === this.selectedSport && !court.isHall;
       }else if(this.selectedSport==='all' && this.selectedCourt==='hall'){
-        court.toShow = court.isHall;
+        this.showingCourts[index] = court.isHall;
       }else{
-        court.toShow = !court.isHall;
+        this.showingCourts[index] = !court.isHall;
       }
     })
   }
 
   onMarkerClick(clickedCourt: Court){
-    //this.courtsService.courtSelected.emit(clickedCourt);
+    this.courtsService.courtSelected.emit(clickedCourt);
   }
 
 

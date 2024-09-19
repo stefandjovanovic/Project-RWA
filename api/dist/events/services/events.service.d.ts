@@ -7,11 +7,14 @@ import { Court } from '../entities/court.entity';
 export declare class EventsService {
     private eventRepository;
     private courtRepository;
-    constructor(eventRepository: Repository<Entities.Event>, courtRepository: Repository<Court>);
+    private playerRepository;
+    constructor(eventRepository: Repository<Entities.Event>, courtRepository: Repository<Court>, playerRepository: Repository<PlayerDetails>);
     createPublicEvent(eventCreateDto: EventCreateDto, player: PlayerDetails): Promise<EventDto>;
     deleteEvent(eventId: string, playerId: string): Promise<void>;
     getPublicEvents(courtId: string): Promise<EventDto[]>;
-    joinEvent(eventId: string, player: PlayerDetails): Promise<void>;
+    joinEvent(eventId: string, playerId: string): Promise<void>;
     leaveEvent(eventId: string, playerId: string): Promise<void>;
     getMyEvents(player: PlayerDetails): Promise<EventDto[]>;
+    getNearbyEvents(userLongitude: number, userLatitude: number): Promise<EventDto[]>;
+    private getDistanceInMeters;
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CourtService } from '../services/court.service';
 import { CourtResponseDto } from '../dto/court-response.dto';
@@ -68,12 +68,15 @@ export class CourtController {
     @UseGuards(RolesGuard)
     @Get('/hall/manager')
     getMyHalls(@GetUser() user: User): Promise<CourtResponseDto[]> {
-        return this.courtService.getMyHalls(user.managerDetails);
+        return this.courtService.getMyHalls(user.managerDetails.id);
     }
 
-    @Get('/scheduled-slots')
-    getScheduledSlots(@Body() getScheduledSlotsDto: GetScheduledSlotsDto): Promise<ScheduledSlotsDto>{
-        return this.courtService.getScheduledSlots(getScheduledSlotsDto);
+    @Get('/scheduled-slots/:id')
+    getScheduledSlots(
+        @Param('id') id: string,
+        @Query('date') date: string
+    ): Promise<ScheduledSlotsDto>{
+        return this.courtService.getScheduledSlots( id, date);
     }
 
 }

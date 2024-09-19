@@ -11,7 +11,8 @@ export class EventDto{
     maxParticipants: number;
     numOfParticipants: number;
     price: number;
-    pariticipants: string[];
+    eventOwnerUsername: string;
+    participants: string[];
     court: {
         name: string;
         address: string;

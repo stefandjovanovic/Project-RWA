@@ -35,11 +35,11 @@ __decorate([
     __metadata("design:type", String)
 ], Court.prototype, "address", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)('float'),
     __metadata("design:type", Number)
 ], Court.prototype, "longitude", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)('float'),
     __metadata("design:type", Number)
 ], Court.prototype, "latitude", void 0);
 __decorate([

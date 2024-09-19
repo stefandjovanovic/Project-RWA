@@ -35,6 +35,7 @@ import { HallEditComponent } from './components/halls/hall-edit/hall-edit.compon
 import { HallEventsListComponent } from './components/halls/hall-events-list/hall-events-list.component';
 import { HallNewComponent } from './components/halls/hall-new/hall-new.component';
 import { HallsListComponent } from './components/halls/halls-list/halls-list.component';
+import {SharedModule} from "../shared/shared.module";
 
 
 
@@ -80,7 +81,8 @@ import { HallsListComponent } from './components/halls/halls-list/halls-list.com
     MatSliderModule,
     MatExpansionModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    SharedModule
   ]
 })
 export class EventsModule { }

@@ -25,7 +25,7 @@ export const selectToken = createSelector(
 
 export const selectRole = createSelector(
   selectUser,
-  (state) => state.role
+  (state) => state ? state.role : ''
 )
 
 export const selectUsername = createSelector(

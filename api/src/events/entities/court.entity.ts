@@ -18,10 +18,10 @@ export class Court {
   @Column()
   address: string;
 
-  @Column()
+  @Column('float')
   longitude: number;
 
-  @Column()
+  @Column('float')
   latitude: number;
 
   @Column()

@@ -19,9 +19,6 @@ export class HallsComponent {
     this.showEventsList = false;
   }
 
-  onHallCreated(){
-    this.showNewHallForm = false;
-  }
 
   onClickEdit(hall: Court){
     this.hallToEdit = hall;
@@ -30,9 +27,6 @@ export class HallsComponent {
     this.showEventsList = false;
   }
 
-  onHallEdited(){
-    this.showEditHallForm = false;
-  }
 
   onShowEventsList(court: Court){
     this.hallToShowId = court.id;

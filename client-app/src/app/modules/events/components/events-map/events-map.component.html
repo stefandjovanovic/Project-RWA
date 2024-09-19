@@ -49,8 +49,8 @@
              [center]="[21.9113, 43.3219]"
              [preserveDrawingBuffer]="true"
     >
-      <div *ngFor="let court of courts">
-        <mgl-marker *ngIf="court.toShow" [lngLat]="[court.longitude, court.latitude]">
+      <div *ngFor="let court of courts; let i = index">
+        <mgl-marker *ngIf="showingCourts[i]" [lngLat]="[court.longitude, court.latitude]">
           <div
             (click)="onMarkerClick(court)"
             class="marker, court-icon"

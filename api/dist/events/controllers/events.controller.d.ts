@@ -11,4 +11,5 @@ export declare class EventsController {
     getMyEvents(user: User): Promise<EventDto[]>;
     joinEvent(id: string, user: User): Promise<void>;
     leaveEvent(id: string, user: User): Promise<void>;
+    getNearbyEvents(longitude: number, latitude: number): Promise<EventDto[]>;
 }

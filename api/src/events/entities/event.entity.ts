@@ -1,8 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Sport } from "../enums/sport.enum";
 import { PlayerDetails } from "src/users/entities/player-details.entity";
 import { Court } from "./court.entity";
 import { TimeSlot } from "./time-slot.entity";
+import { Team } from "src/teams/entities/team.entity";
 
 @Entity()
 export class Event {
@@ -30,21 +31,24 @@ export class Event {
   @Column()
   price: number;
 
-  @ManyToOne(() => PlayerDetails, player => player.ownEvents, {cascade: true})
+  @ManyToOne(() => PlayerDetails, player => player.ownEvents)
   owner: PlayerDetails;
 
-  @ManyToMany(() => PlayerDetails, player => player.events, {cascade: true})
-  @JoinColumn()
+  @ManyToMany(() => PlayerDetails, player => player.events)
+  @JoinTable()
   participants: PlayerDetails[];
 
   @ManyToOne(() => Court, court => court.events)
   court: Court;
 
   @OneToOne(() => TimeSlot, timeSlot => timeSlot.event, {cascade: true})
+  @JoinColumn()
   timeSlot: TimeSlot;
-
 
   @Column()
   private: boolean;
+
+  @ManyToOne(() => Team, team => team.privateEvents)
+  belongsTeam: Team;
 
 }

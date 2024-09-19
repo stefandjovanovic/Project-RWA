@@ -1,1 +1,53 @@
-<p>court-events works!</p>
+<div *ngIf="selectedCourt" class="width-300">
+  <mat-card class="card form">
+    <mat-card-header>
+      <mat-card-title-group class="margin-bottom">
+        <mat-card-title>{{selectedCourt.name}}</mat-card-title>
+        <mat-card-subtitle>{{selectedCourt.sport}}</mat-card-subtitle>
+        <div class="img">
+          <img *ngIf="selectedCourt.image" mat-card-sm-image src="{{selectedCourt.image}}">
+        </div>
+
+      </mat-card-title-group>
+    </mat-card-header>
+
+    <mat-card-content>
+      <h4 *ngIf="selectedCourt.isHall"><b class="label">Price per hour:</b> {{selectedCourt.pricePerHour}} rsd</h4>
+      <h3><b>Available Events:</b></h3>
+      <p *ngIf="eventList.length===0">There are no available events</p>
+      <div *ngIf="eventList.length!==0">
+        <div *ngFor="let event of eventList">
+          <div *ngIf="!hasExpired(event)">
+            <h3>{{event.date | date}}</h3>
+            <h3><b>Time:</b> {{event.startTime}}:00 - {{event.endTime}}:00</h3>
+            <p><b>Description:</b> {{event.description}}</p>
+            <p><b>Places remaining:</b> {{event.maxParticipants - event.participants.length}}</p>
+
+            <div>
+              <button mat-button [matMenuTriggerFor]="menu" class="button-see-participants">See participants</button>
+
+              <mat-menu #menu="matMenu" xPosition="before">
+                <div *ngFor="let username of event.participants">
+                  <button mat-menu-item  [routerLink]="'/player/page/' + username">{{username}}</button>
+                </div>
+              </mat-menu>
+            </div>
+            <button mat-flat-button color="primary" [disabled]="!checkToJoin(event)" (click)="joinEvent(event)" class="join-button">Join</button>
+            <button mat-flat-button color="accent" [disabled]="checkToLeave(event)" (click)="leaveEvent(event)" class="leave-button">Leave</button>
+
+            <mat-divider></mat-divider>
+
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <!--    <hr class="separator-line">-->
+    <mat-card-footer>
+      <mat-card-actions>
+        <button mat-stroked-button color="primary"
+                [routerLink]="['/events/new', selectedCourt.id, selectedCourt.sport, selectedCourt.startTime, selectedCourt.endTime, selectedCourt.pricePerHour]"
+                class="center light-gray">Add new Event</button>
+      </mat-card-actions>
+    </mat-card-footer>
+  </mat-card>
+</div>

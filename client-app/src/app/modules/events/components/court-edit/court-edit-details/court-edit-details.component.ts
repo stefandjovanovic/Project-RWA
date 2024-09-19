@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Observable, Subject, takeUntil} from "rxjs";
+import {Observable, Subject, Subscription, takeUntil} from "rxjs";
 import {Court} from "../../../interfaces/court.interface";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../store/app.reducer";
 import * as CourtsActions from "../../../store/courts/courts.actions";
 import * as CourtsSelectors from "../../../store/courts/courts.selectors";
 import {NgForm} from "@angular/forms";
-import {Actions, ofType} from "@ngrx/effects";
+import {CourtsService} from "../../../services/courts.service";
 
 @Component({
   selector: 'app-court-edit-details',
@@ -21,19 +21,16 @@ export class CourtEditDetailsComponent implements OnInit, OnChanges, OnDestroy {
   nameInput = '';
   imageInput = '';
   typeInput ='';
-  private unsubscribe$ = new Subject<void>();
+  private updateSub = new Subscription();
 
-  constructor(private store: Store<AppState>, private actions$: Actions) {}
+  constructor(private store: Store<AppState>, private courtsService: CourtsService) {}
 
   ngOnInit() {
     this.isLoading = this.store.select(CourtsSelectors.selectCourtsIsLoading);
 
-    this.actions$.pipe(
-      ofType(CourtsActions.courtUpdateSuccess),
-      takeUntil(this.unsubscribe$)
-    ).subscribe(action => {
-      this.editFinished.next('over');
-    });
+    this.updateSub = this.courtsService.successfullyUpdated.subscribe(() => {
+      this.editFinished.emit('success');
+    })
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -44,8 +41,7 @@ export class CourtEditDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.updateSub.unsubscribe();
   }
 
   onSubmit(form: NgForm){

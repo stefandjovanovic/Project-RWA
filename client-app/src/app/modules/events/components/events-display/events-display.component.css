@@ -20,7 +20,7 @@
   align-self: flex-start; /* This will align the app-map component to the end */
   padding-top: 20px;
 }
-.center app-event-detail {
+.center app-court-events {
   align-self: flex-start; /* This will align the app-event-detail component to the start */
   padding-top: 40px;
 }

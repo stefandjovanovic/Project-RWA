@@ -24,6 +24,7 @@ export class CourtEditComponent implements OnDestroy, OnInit {
     this.storeSubscription = this.store.select(CourtsSelectors.selectCourts).subscribe(courts => {
       this.courts = courts.filter(court => !court.isHall);
     })
+    this.store.dispatch(CourtsActions.loadCourts());
   }
 
   ngOnDestroy() {

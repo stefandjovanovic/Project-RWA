@@ -16,6 +16,7 @@ const auth_module_1 = require("../auth/auth.module");
 const users_module_1 = require("../users/users.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const court_entity_1 = require("./entities/court.entity");
+const EntityEvent = require("./entities/event.entity");
 let EventsModule = class EventsModule {
 };
 exports.EventsModule = EventsModule;
@@ -23,8 +24,8 @@ exports.EventsModule = EventsModule = __decorate([
     (0, common_1.Module)({
         controllers: [events_controller_1.EventsController, court_controller_1.CourtController],
         providers: [court_service_1.CourtService, events_service_1.EventsService],
-        imports: [auth_module_1.AuthModule, users_module_1.UsersModule, typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court, Event])],
-        exports: [typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court, Event])],
+        imports: [auth_module_1.AuthModule, users_module_1.UsersModule, typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court, EntityEvent.Event])],
+        exports: [typeorm_1.TypeOrmModule.forFeature([court_entity_1.Court, EntityEvent.Event])],
     })
 ], EventsModule);
 //# sourceMappingURL=events.module.js.map

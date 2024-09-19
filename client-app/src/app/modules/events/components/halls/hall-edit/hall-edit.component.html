@@ -1,5 +1,5 @@
 <form class="form-group" #courtForm="ngForm" (ngSubmit)="onSubmit(courtForm)">
-  <mat-progress-bar *ngIf="isLoading | async" mode="indeterminate"></mat-progress-bar>
+  <mat-progress-bar *ngIf="(isLoading | async)" mode="indeterminate"></mat-progress-bar>
   <h2 class="name">{{selectedHall?.name}}</h2>
   <mat-form-field>
     <mat-label>Select a sport</mat-label>
