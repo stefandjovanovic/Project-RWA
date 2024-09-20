@@ -8,6 +8,9 @@ import { PlayerDetails } from 'src/users/entities/player-details.entity';
 import { Court } from '../entities/court.entity';
 import { TimeSlot } from '../entities/time-slot.entity';
 import { Console } from 'console';
+import { PrivateEventDto } from '../dto/private-event.dto';
+import { User } from 'src/auth/user.entity';
+import { Team } from 'src/teams/entities/team.entity';
 
 @Injectable()
 export class EventsService {
@@ -18,7 +21,11 @@ export class EventsService {
         @InjectRepository(Court)
         private courtRepository: Repository<Court>,
         @InjectRepository(PlayerDetails)
-        private playerRepository: Repository<PlayerDetails>
+        private playerRepository: Repository<PlayerDetails>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+        @InjectRepository(Team)
+        private teamRepository: Repository<Team>
     ) {}
 
 
@@ -328,4 +335,130 @@ export class EventsService {
         let c = 2 * Math.asin(Math.sqrt(a));
         return rad * c * 1000;
     }
-}
+
+
+    async getPrivateEvents(teamId: string): Promise<PrivateEventDto[]> {
+        const events = await this.eventRepository.find({
+            where: {private: true, belongsTeam: {id: teamId}},
+            relations: ['participants', 'court', 'owner', 'timeSlot', 'belongsTeam']
+        });
+
+        const eventDtos = await Promise.all(events.map(async event => {
+            const owner = await this.playerRepository.findOne({
+                where: {id: event.owner.id},
+                relations: ['user']
+            });
+            const participants = await this.playerRepository.find({
+                where: {events: {id: event.id}},
+                relations: ['user']
+            });
+            return {
+                id: event.id,
+                teamId: event.belongsTeam.id,
+                teamName: event.belongsTeam.name,
+                description: event.description,
+                date: event.date,
+                sport: event.sport,
+                numOfParticipants: event.numOfParticipants,
+                maxParticipants: event.maxParticipants,
+                price: event.price,
+                startTime: event.timeSlot.startTime,
+                endTime: event.timeSlot.endTime,
+                eventOwnerUsername: owner.user.username,
+                participants: participants.map(p => p.user.username),
+                court: {
+                    name: event.court.name,
+                    address: event.court.address,
+                    longitude: event.court.longitude,
+                    latitude: event.court.latitude,
+                    image: event.court.image
+                }
+            };
+        }
+        ));
+        return eventDtos;      
+    }
+
+    async createPrivateEvent(eventCreateDto: EventCreateDto, userId: string, teamId: string): Promise<PrivateEventDto> {
+        const user = await this.userRepository.findOne({
+            where: {id: userId},
+            relations: ['playerDetails', 'playerDetails.ownEvents', 'playerDetails.events']
+        });
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const team = await this.teamRepository.findOne({
+            where: {id: teamId},
+            relations: ['privateEvents']
+        });
+        if (!team) {
+            throw new Error('Team not found');
+        }
+        const event = new Entities.Event();
+        event.title = eventCreateDto.title;
+        event.description = eventCreateDto.description;
+        event.date = eventCreateDto.date;
+        event.sport = eventCreateDto.sport;
+        event.numOfParticipants = 1;
+        event.maxParticipants = eventCreateDto.maxParticipants;
+        event.price = eventCreateDto.price;
+
+        //owner of event
+        event.owner = user.playerDetails;
+        if(!user.playerDetails.ownEvents){
+            user.playerDetails.ownEvents = [event];
+        }else{
+            user.playerDetails.ownEvents.push(event);
+        }
+        //court on which it is played
+        const court = await this.courtRepository.findOne({
+            where: {id: eventCreateDto.courtId},
+            relations: ['events', 'timeSlots']
+        });
+        event.court = court;
+        court.events.push(event);
+        //participants array
+        event.participants = [user.playerDetails];
+        user.playerDetails.events.push(event);
+        //timeslot
+        const timeSlot = new TimeSlot();
+        timeSlot.startTime = eventCreateDto.startTime;
+        timeSlot.endTime = eventCreateDto.endTime;
+        timeSlot.date = eventCreateDto.date;
+        timeSlot.court = court;
+        court.timeSlots.push(timeSlot);
+        timeSlot.event = event;
+        event.timeSlot = timeSlot;
+        //belongs team
+        event.private = true;
+        event.belongsTeam = team;
+        team.privateEvents.push(event);
+
+        await this.userRepository.save(user);
+        const newEvent = await this.eventRepository.save(event);
+
+        return {
+            id: newEvent.id,
+            teamId: team.id,
+            teamName: team.name,
+            description: newEvent.description,
+            date: newEvent.date,
+            sport: newEvent.sport,
+            numOfParticipants: newEvent.numOfParticipants,
+            maxParticipants: newEvent.maxParticipants,
+            price: newEvent.price,
+            startTime: timeSlot.startTime,
+            endTime: timeSlot.endTime,
+            eventOwnerUsername: user.username,
+            participants: [user.username],
+            court: {
+                name: court.name,
+                address: court.address,
+                longitude: court.longitude,
+                latitude: court.latitude,
+                image: court.image
+            }
+
+
+    }
+}}

@@ -3,6 +3,7 @@ import { Sport } from "../enums/sport.enum";
 import { ManagerDetails } from "src/users/entities/manager-details.entity";
 import { Event } from "./event.entity";
 import { TimeSlot } from "./time-slot.entity";
+import { Challenge } from "src/teams/entities/challenge.entity";
 
 @Entity()
 export class Court {
@@ -44,6 +45,9 @@ export class Court {
 
   @OneToMany(() => Event, event => event.court, {cascade: true})
   events: Event[];
+
+  @OneToMany(() => Challenge, challenge => challenge.court)
+  challenges: Challenge[];
 
   @OneToMany(() => TimeSlot, timeSlot => timeSlot.court, {cascade: true})
   timeSlots: TimeSlot[];

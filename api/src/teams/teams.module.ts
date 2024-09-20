@@ -6,11 +6,15 @@ import { UsersModule } from 'src/users/users.module';
 import { EventsModule } from 'src/events/events.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Team } from './entities/team.entity';
+import { ChallengesController } from './controllers/challenges.controller';
+import { ChallengesService } from './services/challenges.service';
+import { Challenge } from './entities/challenge.entity';
+import { ChallengeResult } from './entities/challenge-result.entity';
 
 @Module({
-  controllers: [TeamController],
-  providers: [TeamService],
-  imports: [AuthModule, UsersModule, EventsModule, TypeOrmModule.forFeature([Team])],
-  exports: [TypeOrmModule.forFeature([Team])],
+  controllers: [TeamController, ChallengesController],
+  providers: [TeamService, ChallengesService],
+  imports: [AuthModule, UsersModule, EventsModule, TypeOrmModule.forFeature([Team, Challenge, ChallengeResult])],
+  exports: [TypeOrmModule.forFeature([Team, Challenge, ChallengeResult])],
 })
 export class TeamsModule {}

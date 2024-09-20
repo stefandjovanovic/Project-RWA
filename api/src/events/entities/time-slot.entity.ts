@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Court } from "./court.entity";
 import { Event } from "./event.entity";
+import { Challenge } from "src/teams/entities/challenge.entity";
 
 @Entity()
 export class TimeSlot{
@@ -21,5 +22,8 @@ export class TimeSlot{
 
     @OneToOne(() => Event, event => event.timeSlot)
     event: Event;
+
+    @OneToOne(() => Challenge, challenge => challenge.timeSlot)
+    challenge: Challenge;
 
 }

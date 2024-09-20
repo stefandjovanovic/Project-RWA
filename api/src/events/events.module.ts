@@ -8,11 +8,12 @@ import { UsersModule } from 'src/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Court } from './entities/court.entity';
 import * as EntityEvent from './entities/event.entity';
+import { TeamsModule } from 'src/teams/teams.module';
 
 @Module({
   controllers: [EventsController, CourtController],
   providers: [CourtService, EventsService],
-  imports: [AuthModule, UsersModule, TypeOrmModule.forFeature([Court, EntityEvent.Event])],
+  imports: [AuthModule, UsersModule, TypeOrmModule.forFeature([Court, EntityEvent.Event]), TeamsModule],
   exports: [TypeOrmModule.forFeature([Court, EntityEvent.Event])],
 })
 export class EventsModule {}

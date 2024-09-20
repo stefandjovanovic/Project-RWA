@@ -1,4 +1,50 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { create } from 'domain';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { CreateTeamDto } from '../dto/create-team.dto';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/auth/user.entity';
+import { TeamDto } from '../dto/team-dto';
+import { TeamService } from '../services/team.service';
 
+
+@UseGuards(AuthGuard, RolesGuard)
+@Roles(['player'])
 @Controller('team')
-export class TeamController {}
+export class TeamController {
+
+    constructor(private teamService: TeamService) {}
+
+    @Get('/my-teams')
+    async getMyTeams(@GetUser() user: User): Promise<TeamDto[]> {
+        return this.teamService.getMyTeams(user.id);
+    }
+
+    @Post('/create')
+    async createTeam(@Body() createTeamDto: CreateTeamDto, @GetUser() user: User): Promise<TeamDto> {
+        return this.teamService.createTeam(createTeamDto, user.id);
+    }
+
+    @Patch('/edit/:id')
+    async editTeam(@Body() createTeamDto: CreateTeamDto, @Param('id') id: string): Promise<void> {
+        return this.teamService.editTeam(createTeamDto, id);
+    }
+
+    @Delete('/delete/:id')
+    async deleteTeam(@Param('id') id: string): Promise<void> {
+        return this.teamService.deleteTeam(id);
+    }
+
+    @Post('/add-member/:teamId/:username')
+    async addMember(@Param('teamId') teamId: string, @Param('username') username: string): Promise<void> {
+        return this.teamService.addMember(teamId, username);
+    }
+
+    @Delete('/remove-member/:teamId/:username')
+    async removeMember(@Param('teamId') teamId: string, @Param('username') username: string): Promise<void> {
+        return this.teamService.removeMember(teamId, username);
+    }
+
+}
