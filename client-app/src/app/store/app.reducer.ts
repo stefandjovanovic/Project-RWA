@@ -6,6 +6,8 @@ import * as fromCourts from "../modules/events/store/courts/courts.reducer";
 import * as fromHalls from "../modules/events/store/halls/halls.reducer";
 import * as fromEvents from "../modules/events/store/events/events.reducer";
 import * as fromNearbyEvents from "../modules/events/store/nearby-events/nearby-events.reducer";
+import * as fromTeams from "../modules/teams/store/teams/teams.reducer";
+import * as fromPrivateEvents from "../modules/teams/store/private-events/private-events.reducer";
 
 export interface AppState{
   auth: fromAuth.State;
@@ -15,6 +17,8 @@ export interface AppState{
   halls: fromHalls.State;
   events: fromEvents.State;
   nearbyEvents: fromNearbyEvents.State;
+  teams: fromTeams.State;
+  privateEvents: fromPrivateEvents.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -24,5 +28,7 @@ export const appReducer: ActionReducerMap<AppState> = {
   courts: fromCourts.courtsReducer,
   halls: fromHalls.hallsReducer,
   events: fromEvents.eventReducer,
-  nearbyEvents: fromNearbyEvents.reducer
+  nearbyEvents: fromNearbyEvents.reducer,
+  teams: fromTeams.teamReducer,
+  privateEvents: fromPrivateEvents.privateEventsReducer
 }

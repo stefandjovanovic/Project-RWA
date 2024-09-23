@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateTeamDto } from '../dto/create-team.dto';
 import { User } from 'src/auth/user.entity';
 import { TeamDto } from '../dto/team-dto';
+import { TeamMemberDto } from '../dto/team-member.dto';
 
 @Injectable()
 export class TeamService {
@@ -112,7 +113,7 @@ export class TeamService {
         await this.teamRepository.remove(team);
     }
 
-    async addMember(teamId: string, username: string): Promise<void>{
+    async addMember(teamId: string, username: string): Promise<TeamMemberDto>{
         const team = await this.teamRepository.findOne({
             where: {id: teamId},
             relations: ['members']
@@ -144,6 +145,14 @@ export class TeamService {
 
         await this.teamRepository.save(team);
         await this.userRepository.save(user);
+
+        return {
+            userId: user.id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            profilePicture: user.playerDetails.profilePicture
+        }
     }
 
     async removeMember(teamId: string, username: string): Promise<void>{

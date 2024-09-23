@@ -112,7 +112,7 @@ export class EventsService {
         const currentDate = new Date();
         currentDate.setUTCHours(0, 0, 0, 0);
 
-        const events = await this.eventRepository.find(
+        let events = await this.eventRepository.find(
         {where: {
             court: {id: courtId},
             private: false,
@@ -125,6 +125,28 @@ export class EventsService {
             timeSlot: true
         }
         });
+
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+
+        events = events.filter(event => {
+            const eventDate = event.date;
+            eventDate.setUTCHours(0, 0, 0, 0);
+            //passed events
+            if(eventDate < today){
+                return false;
+            }
+            //events that are today
+            if(eventDate.getDate() === today.getDate()
+                && eventDate.getMonth() === today.getMonth()
+                && eventDate.getFullYear() === today.getFullYear()
+                && event.timeSlot.startTime < todayHours){
+                return false;
+            }
+            return true;
+        });
+
 
         const eventDtos = await Promise.all(events.map(async event => {
             const owner = await this.playerRepository.findOne({
@@ -213,10 +235,32 @@ export class EventsService {
     }
 
     async getMyEvents(player: PlayerDetails): Promise<EventDto[]> {
-        const events = await this.eventRepository.find({
+        let events = await this.eventRepository.find({
                 where: {participants: {id: player.id}},
                 relations: ['participants', 'court', 'owner', 'timeSlot']
             });
+
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+    
+        events = events.filter(event => {
+            const eventDate = event.date;
+            eventDate.setUTCHours(0, 0, 0, 0);
+            //passed events
+            if(eventDate < today){
+                return false;
+            }
+            //events that are today
+            if(eventDate.getDate() === today.getDate()
+                && eventDate.getMonth() === today.getMonth()
+                && eventDate.getFullYear() === today.getFullYear()
+                && event.timeSlot.startTime < todayHours){
+                return false;
+            }
+            return true;
+        });
+    
         return events.map(event => {
             return {
                 id: event.id,
@@ -338,9 +382,31 @@ export class EventsService {
 
 
     async getPrivateEvents(teamId: string): Promise<PrivateEventDto[]> {
-        const events = await this.eventRepository.find({
+
+        let events = await this.eventRepository.find({
             where: {private: true, belongsTeam: {id: teamId}},
             relations: ['participants', 'court', 'owner', 'timeSlot', 'belongsTeam']
+        });
+
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+
+        events = events.filter(event => {
+            const eventDate = event.date;
+            eventDate.setUTCHours(0, 0, 0, 0);
+            //passed events
+            if(eventDate < today){
+                return false;
+            }
+            //events that are today
+            if(eventDate.getDate() === today.getDate()
+                && eventDate.getMonth() === today.getMonth()
+                && eventDate.getFullYear() === today.getFullYear()
+                && event.timeSlot.startTime < todayHours){
+                return false;
+            }
+            return true;
         });
 
         const eventDtos = await Promise.all(events.map(async event => {

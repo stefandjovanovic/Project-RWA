@@ -1,0 +1,11 @@
+<mat-grid-list cols="4" rowHeight="100%" gutterSize="10px">
+  <mat-grid-tile colspan="1" rowspan="1" class="center">
+    <app-teams-list (teamSelected)="teamSelected()"></app-teams-list>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="2" rowspan="1" class="center">
+    <app-chat *ngIf="teamIsSelected"></app-chat>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="1" class="center">
+    <app-team-details *ngIf="teamIsSelected" (teamDeleted)="teamIsSelected = false"></app-team-details>
+  </mat-grid-tile>
+</mat-grid-list>

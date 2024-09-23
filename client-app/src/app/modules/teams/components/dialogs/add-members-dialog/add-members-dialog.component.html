@@ -1,0 +1,37 @@
+<div class="dialog">
+  <h2 mat-dialog-title class="h2">Add members to a team</h2>
+  <mat-dialog-content>
+    <div class="form-container">
+      <mat-form-field class="width">
+        <mat-label>Search for a player</mat-label>
+        <input matInput
+               placeholder="username"
+               name="name"
+               [formControl]="searchControl"
+        >
+      </mat-form-field>
+    </div>
+
+
+    <h4 *ngIf="searchResult.length === 0">There are no results...</h4>
+    <div *ngFor="let player of searchResult" class="player-info">
+      <div class="player width">
+        <img [src]="player.profilePicture ? player.profilePicture : 'assets/player-avatar.png'"
+             class="avatar"
+             alt="avatar">
+        <span>{{ player.username }}</span>
+        <button mat-mini-fab
+                (click)="addPlayer(player)" class="add-button">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-flat-button color="primary" (click)="onNoClick()">Close</button>
+  </mat-dialog-actions>
+</div>

@@ -1,0 +1,20 @@
+.width{
+  width: 50%;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* This will center the button vertically */
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+button{
+  margin-right: 20px;
+  border-radius: 5px;
+}
+.margin-top{
+  margin-top: 15px;
+}
+.delete-button{
+  margin-left: 25px;
+}

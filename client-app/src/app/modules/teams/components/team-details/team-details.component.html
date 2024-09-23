@@ -1,0 +1,88 @@
+<mat-accordion class="form">
+  <mat-expansion-panel *ngIf="isCaptain">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Team Controls
+        <mat-icon >settings</mat-icon>
+      </mat-panel-title>
+      <mat-panel-description>
+        Lead by an example
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-team-controls (teamDeleted)="teamDeleted.emit(true)"></app-team-controls>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Team Members
+        <mat-icon >group</mat-icon>
+      </mat-panel-title>
+      <mat-panel-description>
+        See your teammates
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div *ngFor="let player of selectedTeam?.members" class="player-info">
+      <img [src]="player.profilePicture ? player.profilePicture : 'assets/player-avatar.png' " class="avatar">
+      <a mat-button routerLinkActive="active" [routerLink]="'/player/page/' + player.username">{{player.firstName}} {{player.lastName}}</a>
+      <mat-icon *ngIf="player.username === selectedTeam?.captainUsername" style="color: gold">military_tech</mat-icon>
+      <button *ngIf="isCaptain"
+              [disabled]="player.username === selectedTeam?.captainUsername"
+              mat-button color="warn"
+              (click)="onRemove(player.username)" class="remove-button">Remove</button>
+    </div>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Private Events
+        <mat-icon>visibility_off</mat-icon>
+      </mat-panel-title>
+      <mat-panel-description>
+        Only for the chosen
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-private-events></app-private-events>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel *ngIf="isCaptain">
+    <mat-expansion-panel-header>
+      <mat-panel-title >
+        Manage Challenges
+        <mat-icon>tune</mat-icon>
+      </mat-panel-title>
+      <mat-panel-description>
+        Great power is in your hands
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-manage-challenges></app-manage-challenges>
+
+  </mat-expansion-panel>
+
+
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Upcoming Challenges
+        <mat-icon>emoji_events</mat-icon>
+      </mat-panel-title>
+      <mat-panel-description>
+        May the best win
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <app-upcoming-challenges></app-upcoming-challenges>
+
+  </mat-expansion-panel>
+
+</mat-accordion>

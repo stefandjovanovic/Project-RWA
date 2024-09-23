@@ -8,10 +8,12 @@ import { GetUser } from 'src/auth/decorators/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { TeamDto } from '../dto/team-dto';
 import { TeamService } from '../services/team.service';
+import { Role } from 'src/auth/enums/roles.enum';
+import { TeamMemberDto } from '../dto/team-member.dto';
 
 
 @UseGuards(AuthGuard, RolesGuard)
-@Roles(['player'])
+@Roles([Role.PLAYER])
 @Controller('team')
 export class TeamController {
 
@@ -38,7 +40,7 @@ export class TeamController {
     }
 
     @Post('/add-member/:teamId/:username')
-    async addMember(@Param('teamId') teamId: string, @Param('username') username: string): Promise<void> {
+    async addMember(@Param('teamId') teamId: string, @Param('username') username: string): Promise<TeamMemberDto> {
         return this.teamService.addMember(teamId, username);
     }
 

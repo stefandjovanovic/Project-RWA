@@ -24,6 +24,8 @@ import {CourtsEffects} from "./modules/events/store/courts/courts.effects";
 import {HallsEffects} from "./modules/events/store/halls/halls.effects";
 import {EventsEffects} from "./modules/events/store/events/events.effects";
 import {NearbyEventsEffects} from "./modules/events/store/nearby-events/nearby-events.effects";
+import {TeamsEffects} from "./modules/teams/store/teams/teams.effects";
+import {PrivateEventsEffects} from "./modules/teams/store/private-events/private-events.effects";
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import {NearbyEventsEffects} from "./modules/events/store/nearby-events/nearby-e
       CourtsEffects,
       HallsEffects,
       EventsEffects,
-      NearbyEventsEffects
+      NearbyEventsEffects,
+      TeamsEffects,
+      PrivateEventsEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],

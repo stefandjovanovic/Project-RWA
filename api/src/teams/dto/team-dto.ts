@@ -1,4 +1,5 @@
 import { Sport } from "src/events/enums/sport.enum";
+import { TeamMemberDto } from "./team-member.dto";
 
 export class TeamDto{
     id: string;
@@ -8,11 +9,5 @@ export class TeamDto{
     losses: number;
     draws: number;
     captainUsername: string;
-    members:{
-        userId: string;
-        username: string;
-        firstName: string;
-        lastName: string;
-        profilePicture: string;
-    }[];
+    members:TeamMemberDto[];
 }
