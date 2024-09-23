@@ -14,6 +14,7 @@ const user_entity_1 = require("../../auth/user.entity");
 const typeorm_1 = require("typeorm");
 const review_entity_1 = require("./review.entity");
 const event_entity_1 = require("../../events/entities/event.entity");
+const team_entity_1 = require("../../teams/entities/team.entity");
 let PlayerDetails = class PlayerDetails {
 };
 exports.PlayerDetails = PlayerDetails;
@@ -45,6 +46,14 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => event_entity_1.Event, event => event.owner),
     __metadata("design:type", Array)
 ], PlayerDetails.prototype, "ownEvents", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => team_entity_1.Team, team => team.captain),
+    __metadata("design:type", Array)
+], PlayerDetails.prototype, "captainTeams", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => team_entity_1.Team, team => team.members),
+    __metadata("design:type", Array)
+], PlayerDetails.prototype, "teams", void 0);
 exports.PlayerDetails = PlayerDetails = __decorate([
     (0, typeorm_1.Entity)()
 ], PlayerDetails);

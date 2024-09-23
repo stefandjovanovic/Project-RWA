@@ -43,6 +43,7 @@ import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatBadgeModule} from "@angular/material/badge";
+import {SharedModule} from "../shared/shared.module";
 
 
 
@@ -103,7 +104,8 @@ import {MatBadgeModule} from "@angular/material/badge";
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    MatBadgeModule
+    MatBadgeModule,
+    SharedModule
   ]
 })
 export class TeamsModule { }

@@ -11,9 +11,8 @@ import { TeamService } from '../services/team.service';
 import { Role } from 'src/auth/enums/roles.enum';
 import { TeamMemberDto } from '../dto/team-member.dto';
 
-
-@UseGuards(AuthGuard, RolesGuard)
 @Roles([Role.PLAYER])
+@UseGuards(AuthGuard(), RolesGuard)
 @Controller('team')
 export class TeamController {
 
@@ -30,7 +29,7 @@ export class TeamController {
     }
 
     @Patch('/edit/:id')
-    async editTeam(@Body() createTeamDto: CreateTeamDto, @Param('id') id: string): Promise<void> {
+    async editTeam(@Body() createTeamDto: CreateTeamDto, @Param('id') id: string): Promise<TeamDto> {
         return this.teamService.editTeam(createTeamDto, id);
     }
 

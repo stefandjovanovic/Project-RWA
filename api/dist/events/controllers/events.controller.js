@@ -29,8 +29,8 @@ let EventsController = class EventsController {
     createPublicEvent(eventCreateDto, user) {
         return this.eventsService.createPublicEvent(eventCreateDto, user.playerDetails);
     }
-    deleteEvent(id, user) {
-        return this.eventsService.deleteEvent(id, user.playerDetails.id);
+    deleteEvent(id) {
+        return this.eventsService.deleteEvent(id);
     }
     getPublicEvents(courtId) {
         return this.eventsService.getPublicEvents(courtId);
@@ -47,11 +47,15 @@ let EventsController = class EventsController {
     getNearbyEvents(longitude, latitude) {
         return this.eventsService.getNearbyEvents(longitude, latitude);
     }
+    getPrivateEvents(teamId) {
+        return this.eventsService.getPrivateEvents(teamId);
+    }
+    createPrivateEvent(eventCreateDto, teamId, user) {
+        return this.eventsService.createPrivateEvent(eventCreateDto, user.id, teamId);
+    }
 };
 exports.EventsController = EventsController;
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Post)('/public/create'),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, get_user_decorator_1.GetUser)()),
@@ -60,18 +64,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "createPublicEvent", null);
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Post)('/delete/:id'),
     __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, user_entity_1.User]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "deleteEvent", null);
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Get)('/public/:courtId'),
     __param(0, (0, common_1.Param)('courtId')),
     __metadata("design:type", Function),
@@ -79,8 +78,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "getPublicEvents", null);
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Get)('/my'),
     __param(0, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
@@ -88,8 +85,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "getMyEvents", null);
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Post)('/join/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, get_user_decorator_1.GetUser)()),
@@ -98,8 +93,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "joinEvent", null);
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Post)('/leave/:id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, get_user_decorator_1.GetUser)()),
@@ -108,8 +101,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "leaveEvent", null);
 __decorate([
-    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
-    (0, common_1.UseGuards)(roles_guard_1.RolesGuard),
     (0, common_1.Get)('/nearby/:longitude/:latitude'),
     __param(0, (0, common_1.Param)('longitude')),
     __param(1, (0, common_1.Param)('latitude')),
@@ -117,8 +108,25 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "getNearbyEvents", null);
+__decorate([
+    (0, common_1.Get)('/private/:teamId'),
+    __param(0, (0, common_1.Param)('teamId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "getPrivateEvents", null);
+__decorate([
+    (0, common_1.Post)('/private/create/:teamId'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('teamId')),
+    __param(2, (0, get_user_decorator_1.GetUser)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [event_create_dto_1.EventCreateDto, String, user_entity_1.User]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "createPrivateEvent", null);
 exports.EventsController = EventsController = __decorate([
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)()),
+    (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
+    (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), roles_guard_1.RolesGuard),
     (0, common_1.Controller)('events'),
     __metadata("design:paramtypes", [events_service_1.EventsService])
 ], EventsController);

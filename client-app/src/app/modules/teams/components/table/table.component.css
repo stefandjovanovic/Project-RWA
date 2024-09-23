@@ -1,0 +1,18 @@
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: currentColor;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+h5 {
+  font-size: 1.1rem;
+  color: #757575;
+  margin: 5px 0;
+}
+
+strong {
+  color: #3F51B5;
+}

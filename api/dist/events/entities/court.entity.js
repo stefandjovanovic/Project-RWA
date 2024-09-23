@@ -15,6 +15,7 @@ const sport_enum_1 = require("../enums/sport.enum");
 const manager_details_entity_1 = require("../../users/entities/manager-details.entity");
 const event_entity_1 = require("./event.entity");
 const time_slot_entity_1 = require("./time-slot.entity");
+const challenge_entity_1 = require("../../teams/entities/challenge.entity");
 let Court = class Court {
 };
 exports.Court = Court;
@@ -70,6 +71,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => event_entity_1.Event, event => event.court, { cascade: true }),
     __metadata("design:type", Array)
 ], Court.prototype, "events", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => challenge_entity_1.Challenge, challenge => challenge.court),
+    __metadata("design:type", Array)
+], Court.prototype, "challenges", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => time_slot_entity_1.TimeSlot, timeSlot => timeSlot.court, { cascade: true }),
     __metadata("design:type", Array)

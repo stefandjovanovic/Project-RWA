@@ -231,8 +231,9 @@ let CourtService = class CourtService {
         const timeSlots = court.timeSlots.filter(timeSlot => {
             const timeSlotDate = new Date(timeSlot.date);
             timeSlotDate.setUTCHours(0, 0, 0, 0);
-            console.log(timeSlotDate);
-            return (timeSlotDate.getDate === date.getDate && timeSlotDate.getMonth === date.getMonth && timeSlotDate.getFullYear === date.getFullYear);
+            return (timeSlotDate.getUTCDate() === date.getUTCDate() &&
+                timeSlotDate.getUTCMonth() === date.getUTCMonth() &&
+                timeSlotDate.getUTCFullYear() === date.getUTCFullYear());
         });
         console.log(timeSlots);
         return {

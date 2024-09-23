@@ -22,10 +22,24 @@ export const eventReducer = createReducer(
   on(EventsActions.deleteEventSuccess, (state, {id}) =>
     adapter.removeOne(id, state)
   ),
-  on(EventsActions.joinEventSuccess, (state, {eventId, username}) =>
-    adapter.updateOne({id: eventId, changes: {participants: [...state.entities[eventId]!.participants, username]}}, state)
+  on(EventsActions.joinEventSuccess, (state, {eventId, username}) => {
+    if(!state.entities[eventId]){
+      return {... state};
+    }
+    return adapter.updateOne({
+        id: eventId,
+        changes: {participants: [...state.entities[eventId].participants, username]}
+    }, state)
+    }
   ),
-  on(EventsActions.leaveEventSuccess, (state, {id, username}) =>
-    adapter.updateOne({id, changes: {participants: state.entities[id]!.participants.filter(participant => participant !== username)}}, state)
+  on(EventsActions.leaveEventSuccess, (state, {id, username}) => {
+    if(!state.entities[id]){
+      return {... state};
+    }
+    return adapter.updateOne({
+        id,
+        changes: {participants: state.entities[id].participants.filter(participant => participant !== username)}
+    }, state)
+    }
   )
 )

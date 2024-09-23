@@ -7,15 +7,27 @@ import {EventCreate} from "../../events/interfaces/event-create.interface";
   providedIn: 'root'
 })
 export class PrivateEventsService {
-  private baseUrl = 'http://localhost:3000/api/events/private';
+  private baseUrl = 'http://localhost:3000/events/private';
 
   constructor(private http: HttpClient) { }
 
   getEventsForTeam(teamId: string) {
-    return this.http.get<PrivateEvent[]>(`${this.baseUrl}/team/${teamId}`);
+    return this.http.get<PrivateEvent[]>(`${this.baseUrl}/${teamId}`);
   }
 
   createPrivateEvent(teamId: string, event: EventCreate) {
-    return this.http.post<PrivateEvent>(`/create/${this.baseUrl}/${teamId}`, event);
+    return this.http.post<PrivateEvent>(`${this.baseUrl}/create/${teamId}`, event);
+  }
+
+  joinEvent(id: string){
+    return this.http.post(`http://localhost:3000/events/join/${id}`, {});
+  }
+
+  leaveEvent(id: string){
+    return this.http.post(`http://localhost:3000/events/leave/${id}`, {});
+  }
+
+  deleteEvent(id: string){
+    return this.http.delete(`http://localhost:3000/events/delete/${id}`);
   }
 }

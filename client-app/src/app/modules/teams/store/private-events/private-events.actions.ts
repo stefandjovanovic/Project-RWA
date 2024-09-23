@@ -22,3 +22,33 @@ export const createPrivateEventSuccess = createAction(
   '[Private Events] Create Private Event Success',
   props<{ privateEvent: PrivateEvent }>()
 );
+
+export const joinPrivateEvent = createAction(
+  '[Private Events] Join Private Event',
+  props<{ eventId: string, username: string }>()
+);
+
+export const joinPrivateEventSuccess = createAction(
+  '[Private Events] Join Private Event Success',
+  props<{ eventId: string, username: string }>()
+);
+
+export const leavePrivateEvent = createAction(
+  '[Private Events] Leave Private Event',
+  props<{ eventId: string, username: string }>()
+);
+
+export const leavePrivateEventSuccess = createAction(
+  '[Private Events] Leave Private Event Success',
+  props<{ eventId: string, username: string }>()
+);
+
+export const deletePrivateEvent = createAction(
+  '[Private Events] Delete Private Event',
+  props<{ eventId: string }>()
+);
+
+export const deletePrivateEventSuccess = createAction(
+  '[Private Events] Delete Private Event Success',
+  props<{ eventId: string }>()
+);

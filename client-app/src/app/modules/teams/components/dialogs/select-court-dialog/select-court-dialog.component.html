@@ -1,1 +1,11 @@
-<p>select-court-dialog works!</p>
+<mat-nav-list class="list">
+  <mat-list-item *ngFor="let court of courts"
+                 [routerLink]="['teams', 'privateEvent', 'create', court.id, data.teamId, court.startTime, court.endTime, court.pricePerHour, data.sport]"
+                 (click)="onNoClick()">
+    <img *ngIf="court.image" matListItemAvatar [src]="court.image" alt="court">
+    <h3 matListItemTitle>{{court.name}}</h3>
+    <p matListItemLine>{{court.address}}</p>
+    <p matListItemMeta *ngIf="court.isHall">{{court.pricePerHour}} RSD</p>
+  </mat-list-item>
+
+</mat-nav-list>

@@ -27,8 +27,8 @@ export class CourtsEffects{
     this.actions$.pipe(
       ofType(CourtsActions.loadCourts),
       withLatestFrom(this.store.select(selectCourts)),
-      switchMap(([actionData, loadedPlayers]) => {
-        if (loadedPlayers.length > 0) {
+      switchMap(([actionData, loadedCourts]) => {
+        if (loadedCourts.length > 0) {
           return of();
         }
         return this.courtsService.getAllCourts().pipe(

@@ -16,6 +16,7 @@ const users_module_1 = require("./users/users.module");
 const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 const events_module_1 = require("./events/events.module");
 const config_1 = require("@nestjs/config");
+const teams_module_1 = require("./teams/teams.module");
 const typeorm_config_1 = require("./config/typeorm.config");
 let AppModule = class AppModule {
 };
@@ -34,7 +35,7 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             cloudinary_module_1.CloudinaryModule,
-            events_module_1.EventsModule
+            events_module_1.EventsModule, teams_module_1.TeamsModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

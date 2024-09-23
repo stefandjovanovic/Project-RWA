@@ -1,0 +1,28 @@
+.events-list{
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+.width{
+  width: 50%;
+}
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* This will center the button vertically */
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.margin{
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.events-list{
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.button-see-participants{
+  margin-bottom: 10px;
+}

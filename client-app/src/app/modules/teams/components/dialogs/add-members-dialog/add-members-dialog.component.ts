@@ -22,13 +22,13 @@ export class AddMembersDialogComponent implements OnInit, OnDestroy{
 
   searchSubscription?: Subscription;
   storeSub?: Subscription;
+  addPlayerSub?: Subscription;
 
   searchControl = new FormControl('');
 
   constructor(public dialogRef: MatDialogRef<AddMembersDialogComponent>,
               private teamsService: TeamsService,
               private playerService: PlayerService,
-              private _snackBar: MatSnackBar,
               private store: Store<AppState>,
               @Inject(MAT_DIALOG_DATA) public currentMembers: TeamMember[]) {}
 
@@ -58,40 +58,31 @@ export class AddMembersDialogComponent implements OnInit, OnDestroy{
 
   }
   ngOnDestroy(): void {
-    this.searchSubscription?.unsubscribe();
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+    }
+
   }
 
   onNoClick(): void {
     this.dialogRef.close();
+    if (this.addPlayerSub) {
+      this.addPlayerSub.unsubscribe();
+    }
   }
 
   addPlayer(player: PlayerDetails){
-    this.store.select(TeamsSelectors.selectSelectedTeamId).subscribe(selectedTeamId => {
+    this.addPlayerSub = this.store.select(TeamsSelectors.selectSelectedTeamId).subscribe(selectedTeamId => {
       if(!selectedTeamId) {
         return;
       }
-
       this.store.dispatch(TeamsActions.addMember({teamId: selectedTeamId, username: player.username}));
-
+      this.searchResult = this.searchResult.filter(p => p.username !== player.username);
     });
 
-
-    // this.teamsService.addMemberToTeam(teamId, player.username).subscribe({
-    //   next: (response) => {
-    //     this.currentMembers?.push({
-    //       username: player.username,
-    //       displayName: player.displayName,
-    //       image: player.image,
-    //       bio: player.bio,
-    //       address: player.address,
-    //     });
-    //     this.searchResult = this.searchResult.filter(p => p.username !== player.username);
-    //     this._snackBar.open(player.displayName+' added to team', 'close', {duration: 3000})
-    //   },
-    //   error: (error) => {
-    //     console.log(error);
-    //   }
-    // });
 
 
   }

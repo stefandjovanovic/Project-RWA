@@ -22,8 +22,8 @@ export class EventsController {
     }
 
     @Post('/delete/:id')
-    deleteEvent(@Param('id') id: string, @GetUser() user: User): Promise<void> {
-        return this.eventsService.deleteEvent(id, user.playerDetails.id);
+    deleteEvent(@Param('id') id: string): Promise<void> {
+        return this.eventsService.deleteEvent(id);
     }
 
     @Get('/public/:courtId')
@@ -51,12 +51,12 @@ export class EventsController {
         return this.eventsService.getNearbyEvents(longitude, latitude);
     }
 
-    @Get('private/:teamId')
+    @Get('/private/:teamId')
     getPrivateEvents(@Param('teamId') teamId: string): Promise<PrivateEventDto[]> {
         return this.eventsService.getPrivateEvents(teamId);
     }
 
-    @Post('private/create/:teamId')
+    @Post('/private/create/:teamId')
     createPrivateEvent(
         @Body() eventCreateDto: EventCreateDto,
         @Param('teamId') teamId: string,

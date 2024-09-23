@@ -41,7 +41,7 @@ export class Event {
   @ManyToOne(() => Court, court => court.events)
   court: Court;
 
-  @OneToOne(() => TimeSlot, timeSlot => timeSlot.event, {cascade: true})
+  @OneToOne(() => TimeSlot, timeSlot => timeSlot.event, {cascade: true, onDelete: 'CASCADE'})
   @JoinColumn()
   timeSlot: TimeSlot;
 

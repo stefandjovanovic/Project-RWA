@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TeamController } from './controllers/team.controller';
 import { TeamService } from './services/team.service';
 import { AuthModule } from 'src/auth/auth.module';
@@ -14,7 +14,12 @@ import { ChallengeResult } from './entities/challenge-result.entity';
 @Module({
   controllers: [TeamController, ChallengesController],
   providers: [TeamService, ChallengesService],
-  imports: [AuthModule, UsersModule, EventsModule, TypeOrmModule.forFeature([Team, Challenge, ChallengeResult])],
+  imports: [
+    AuthModule,
+    UsersModule, 
+    forwardRef(() => EventsModule), 
+    TypeOrmModule.forFeature([Team, Challenge, ChallengeResult])
+  ],
   exports: [TypeOrmModule.forFeature([Team, Challenge, ChallengeResult])],
 })
 export class TeamsModule {}

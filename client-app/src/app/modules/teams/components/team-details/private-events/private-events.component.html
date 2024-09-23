@@ -1,1 +1,31 @@
-<p>private-events works!</p>
+<button mat-raised-button color="primary" (click)="onCreateEvent()" class="width">Create an event</button>
+
+<p *ngIf="events.length === 0" class="margin">There are no events</p>
+
+<div *ngIf="events.length > 0" class="events-list">
+
+  <div *ngFor="let event of events" class="event">
+    <h4>{{event.date | date}}, {{event.startTime}}:00 - {{event.endTime}}:00</h4>
+    <p>Court: {{event.court.name}}, {{event.court.address}}</p>
+    <p>Description: {{event.description}}</p>
+    <p>Remaining places: {{event.maxParticipants - event.participants.length}}</p>
+    <div>
+      <button mat-button [matMenuTriggerFor]="menu" class="button-see-participants">See participants</button>
+
+      <mat-menu #menu="matMenu" xPosition="before">
+        <div *ngFor="let user of event.participants">
+          <button mat-menu-item  [routerLink]="'/player/page/' + user">{{user}}</button>
+        </div>
+      </mat-menu>
+    </div>
+    <button mat-button color="primary" (click)="joinEvent(event)"
+            [disabled]="alreadyParticipating(event) || eventFull(event)"
+    >Join </button>
+    <button mat-button color="warn" (click)="leaveEvent(event)"
+            [disabled]="!alreadyParticipating(event) || currentUserUsername===event.eventOwnerUsername"
+    >Leave </button>
+    <button *ngIf="currentUserUsername === event.eventOwnerUsername" mat-button color="warn" (click)="deleteEvent(event)">Delete</button>
+    <mat-divider></mat-divider>
+  </div>
+
+</div>

@@ -25,13 +25,13 @@ export class Team {
     @Column()
     draws: number;
 
-    @ManyToOne(() => PlayerDetails, player => player.captainTeams, {cascade: true})
+    @ManyToOne(() => PlayerDetails, player => player.captainTeams)
     captain: PlayerDetails;
 
     @Column()
     captainUsername: string;
 
-    @ManyToMany(() => PlayerDetails, player => player.teams, {cascade: true})
+    @ManyToMany(() => PlayerDetails, player => player.teams)
     @JoinTable()
     members: PlayerDetails[];
 

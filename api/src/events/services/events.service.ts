@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { EventDto } from '../dto/event.dto';
 import { EventCreateDto } from '../dto/event-create.dto';
-import * as Entities from '../entities/event.entity';
+import{Event} from '../entities/event.entity';
 import { PlayerDetails } from 'src/users/entities/player-details.entity';
 import { Court } from '../entities/court.entity';
 import { TimeSlot } from '../entities/time-slot.entity';
@@ -16,8 +16,8 @@ import { Team } from 'src/teams/entities/team.entity';
 export class EventsService {
 
     constructor(
-        @InjectRepository(Entities.Event)
-        private eventRepository: Repository<Entities.Event>,
+        @InjectRepository(Event)
+        private eventRepository: Repository<Event>,
         @InjectRepository(Court)
         private courtRepository: Repository<Court>,
         @InjectRepository(PlayerDetails)
@@ -31,7 +31,7 @@ export class EventsService {
 
 
     async createPublicEvent(eventCreateDto: EventCreateDto, player: PlayerDetails): Promise<EventDto> {
-        const event = new Entities.Event();
+        const event = new Event();
         event.title = eventCreateDto.title;
         event.description = eventCreateDto.description;
         event.date = eventCreateDto.date;
@@ -95,14 +95,13 @@ export class EventsService {
         };
     }
 
-    async deleteEvent(eventId: string, playerId: string): Promise<void> {
-        const event = await this.eventRepository.findOneBy({id: eventId});
+    async deleteEvent(eventId: string): Promise<void> {
+        const event = await this.eventRepository.findOne({
+            where: {id: eventId},
+            relations: ['owner', 'participants', 'court', 'timeSlot']
+        });
         if (!event) {
             throw new Error('Event not found');
-        }
-
-        if (event.owner.id !== playerId) {
-            throw new Error('You are not the owner of this event');
         }
 
         await this.eventRepository.remove(event);
@@ -294,14 +293,14 @@ export class EventsService {
             return distance <= 1500;
         });
 
-        const nearbyEvents: Entities.Event[] = [];
+        const nearbyEvents: Event[] = [];
 
         const today = new Date();
         const todayHours = today.getHours();
         today.setUTCHours(0, 0, 0, 0);
 
         nearbyCourts.forEach(court => {
-            court.events.forEach((event: Entities.Event) => {
+            court.events.forEach((event: Event) => {
                 const eventDate = event.date;
                 eventDate.setUTCHours(0, 0, 0, 0);
                 //passed events
@@ -460,7 +459,7 @@ export class EventsService {
         if (!team) {
             throw new Error('Team not found');
         }
-        const event = new Entities.Event();
+        const event = new Event();
         event.title = eventCreateDto.title;
         event.description = eventCreateDto.description;
         event.date = eventCreateDto.date;

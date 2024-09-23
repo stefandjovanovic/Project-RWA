@@ -22,7 +22,15 @@ export class TeamService {
             relations: ['playerDetails', 'playerDetails.teams']
         });
 
-        return user.playerDetails.teams.map(team => {
+        let teams = await this.teamRepository.find({
+            relations: ['members', 'members.user']
+        });
+
+        teams = teams.filter(team => team.members.find(member => member.id === user.playerDetails.id));
+
+        console.log(teams[1].members);
+
+        return teams.map(team => {
             return {
                 id: team.id,
                 name: team.name,
@@ -47,7 +55,7 @@ export class TeamService {
     async createTeam(createTeamDto: CreateTeamDto, userId: string): Promise<TeamDto>{
         const user = await this.userRepository.findOne({
             where: {id: userId},
-            relations: ['playerDetails', 'playerDetails.teams']
+            relations: ['playerDetails', 'playerDetails.teams', 'playerDetails.captainTeams']
         });
 
         const team = new Team();
@@ -75,6 +83,8 @@ export class TeamService {
         team.challengedList = [];
         team.challengerList = [];
 
+        await this.userRepository.save(user);
+
         const savedTeam = await this.teamRepository.save(team);
 
         return {
@@ -95,14 +105,37 @@ export class TeamService {
         }
     }
 
-    async editTeam(createTeamDto: CreateTeamDto, id: string): Promise<void>{
-        const team = await this.teamRepository.findOneBy({id});
+    async editTeam(createTeamDto: CreateTeamDto, id: string): Promise<TeamDto>{
+        const team = await this.teamRepository.findOne({
+            where: {id},
+            relations: ['members', 'members.user']
+        });
         if(!team){
             throw new Error('Team not found');
         }
         team.name = createTeamDto.name;
         team.sport = createTeamDto.sport;
         await this.teamRepository.save(team);
+
+        return{
+            id: team.id,
+            name: team.name,
+            sport: team.sport,
+            wins: team.wins,
+            losses: team.losses,
+            draws: team.draws,
+            captainUsername: team.captainUsername,
+            members: team.members.map(member => {
+                return {
+                    userId: member.id,
+                    username: member.user.username,
+                    firstName: member.user.firstName,
+                    lastName: member.user.lastName,
+                    profilePicture: member.profilePicture
+                }
+            })
+        }
+
     }
 
     async deleteTeam(id: string): Promise<void>{
@@ -131,6 +164,8 @@ export class TeamService {
         if(!user){
             throw new Error('User not found');
         }
+
+        console.log(team.members);
 
         if(team.members.find(member => member.id === user.playerDetails.id)){
             throw new Error('User already in team');

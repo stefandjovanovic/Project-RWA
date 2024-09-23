@@ -13,6 +13,7 @@ exports.TimeSlot = void 0;
 const typeorm_1 = require("typeorm");
 const court_entity_1 = require("./court.entity");
 const event_entity_1 = require("./event.entity");
+const challenge_entity_1 = require("../../teams/entities/challenge.entity");
 let TimeSlot = class TimeSlot {
 };
 exports.TimeSlot = TimeSlot;
@@ -40,6 +41,10 @@ __decorate([
     (0, typeorm_1.OneToOne)(() => event_entity_1.Event, event => event.timeSlot),
     __metadata("design:type", event_entity_1.Event)
 ], TimeSlot.prototype, "event", void 0);
+__decorate([
+    (0, typeorm_1.OneToOne)(() => challenge_entity_1.Challenge, challenge => challenge.timeSlot),
+    __metadata("design:type", challenge_entity_1.Challenge)
+], TimeSlot.prototype, "challenge", void 0);
 exports.TimeSlot = TimeSlot = __decorate([
     (0, typeorm_1.Entity)()
 ], TimeSlot);

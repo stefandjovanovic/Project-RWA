@@ -15,6 +15,7 @@ const sport_enum_1 = require("../enums/sport.enum");
 const player_details_entity_1 = require("../../users/entities/player-details.entity");
 const court_entity_1 = require("./court.entity");
 const time_slot_entity_1 = require("./time-slot.entity");
+const team_entity_1 = require("../../teams/entities/team.entity");
 let Event = class Event {
 };
 exports.Event = Event;
@@ -64,7 +65,7 @@ __decorate([
     __metadata("design:type", court_entity_1.Court)
 ], Event.prototype, "court", void 0);
 __decorate([
-    (0, typeorm_1.OneToOne)(() => time_slot_entity_1.TimeSlot, timeSlot => timeSlot.event, { cascade: true }),
+    (0, typeorm_1.OneToOne)(() => time_slot_entity_1.TimeSlot, timeSlot => timeSlot.event, { cascade: true, onDelete: 'CASCADE' }),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", time_slot_entity_1.TimeSlot)
 ], Event.prototype, "timeSlot", void 0);
@@ -72,6 +73,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Event.prototype, "private", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => team_entity_1.Team, team => team.privateEvents),
+    __metadata("design:type", team_entity_1.Team)
+], Event.prototype, "belongsTeam", void 0);
 exports.Event = Event = __decorate([
     (0, typeorm_1.Entity)()
 ], Event);
