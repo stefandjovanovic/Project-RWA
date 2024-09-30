@@ -13,7 +13,6 @@ exports.ChallengeResult = void 0;
 const typeorm_1 = require("typeorm");
 const challenge_entity_1 = require("./challenge.entity");
 const result_status_enum_1 = require("../enums/result-status.enum");
-const result_outcome_enum_1 = require("../enums/result-outcome.enum");
 let ChallengeResult = class ChallengeResult {
 };
 exports.ChallengeResult = ChallengeResult;
@@ -41,10 +40,6 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], ChallengeResult.prototype, "resultStatus", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], ChallengeResult.prototype, "homeTeamResult", void 0);
 exports.ChallengeResult = ChallengeResult = __decorate([
     (0, typeorm_1.Entity)()
 ], ChallengeResult);

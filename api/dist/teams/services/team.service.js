@@ -54,6 +54,34 @@ let TeamService = class TeamService {
             };
         });
     }
+    async searchTeams(term) {
+        const teams = await this.teamRepository.find({
+            where: [
+                { name: (0, typeorm_2.ILike)(`%${term}%`) }
+            ],
+            relations: ['members', 'members.user']
+        });
+        return teams.map(team => {
+            return {
+                id: team.id,
+                name: team.name,
+                sport: team.sport,
+                wins: team.wins,
+                losses: team.losses,
+                draws: team.draws,
+                captainUsername: team.captainUsername,
+                members: team.members.map(member => {
+                    return {
+                        userId: member.id,
+                        username: member.user.username,
+                        firstName: member.user.firstName,
+                        lastName: member.user.lastName,
+                        profilePicture: member.profilePicture
+                    };
+                })
+            };
+        });
+    }
     async createTeam(createTeamDto, userId) {
         const user = await this.userRepository.findOne({
             where: { id: userId },

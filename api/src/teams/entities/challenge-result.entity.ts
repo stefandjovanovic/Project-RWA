@@ -1,7 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Challenge } from "./challenge.entity";
 import { ResultStatus } from "../enums/result-status.enum";
-import { ResultOutcome } from "../enums/result-outcome.enum";
 
 
 @Entity()
@@ -24,6 +23,4 @@ export class ChallengeResult {
     @Column()
     resultStatus: ResultStatus;
 
-    @Column()
-    homeTeamResult: ResultOutcome;
 }

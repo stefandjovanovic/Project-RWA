@@ -1,0 +1,28 @@
+.search-field{
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.score{
+  font-weight: bold;
+}
+
+.margin-top{
+  margin-top: 10px;
+}
+
+.accept-button{
+  margin-right: 40px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.reject-button{
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+.incoming{
+  max-height: 50vh;
+  overflow-y: auto;
+}

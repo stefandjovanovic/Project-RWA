@@ -105,13 +105,11 @@ export class CreatePrivateEventComponent implements OnInit, OnDestroy{
     this.eventsService.fetchScheduledSlots(this.courtId, utcDate)
       .subscribe({
         next: (data => {
-          console.log(data);
           data.slots.forEach(slot => {
             for (let i = slot.startTime; i < slot.endTime; i++) {
               this.occupiedSlots.push(i);
             }
           })
-          console.log(this.occupiedSlots);
         }),
         error: (error => {
           console.log(error);

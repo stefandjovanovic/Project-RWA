@@ -9,6 +9,7 @@ export declare class TeamService {
     private userRepository;
     constructor(teamRepository: Repository<Team>, userRepository: Repository<User>);
     getMyTeams(userId: string): Promise<TeamDto[]>;
+    searchTeams(term: string): Promise<TeamDto[]>;
     createTeam(createTeamDto: CreateTeamDto, userId: string): Promise<TeamDto>;
     editTeam(createTeamDto: CreateTeamDto, id: string): Promise<TeamDto>;
     deleteTeam(id: string): Promise<void>;

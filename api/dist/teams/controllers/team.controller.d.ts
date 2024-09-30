@@ -7,6 +7,7 @@ export declare class TeamController {
     private teamService;
     constructor(teamService: TeamService);
     getMyTeams(user: User): Promise<TeamDto[]>;
+    searchTeams(term: string): Promise<TeamDto[]>;
     createTeam(createTeamDto: CreateTeamDto, user: User): Promise<TeamDto>;
     editTeam(createTeamDto: CreateTeamDto, id: string): Promise<TeamDto>;
     deleteTeam(id: string): Promise<void>;

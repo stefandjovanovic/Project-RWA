@@ -8,6 +8,8 @@ import * as fromEvents from "../modules/events/store/events/events.reducer";
 import * as fromNearbyEvents from "../modules/events/store/nearby-events/nearby-events.reducer";
 import * as fromTeams from "../modules/teams/store/teams/teams.reducer";
 import * as fromPrivateEvents from "../modules/teams/store/private-events/private-events.reducer";
+import * as fromChallenges from "../modules/teams/store/challenges/challenges.reducer";
+import * as fromResults from "../modules/teams/store/results/results.reducer";
 
 export interface AppState{
   auth: fromAuth.State;
@@ -19,6 +21,8 @@ export interface AppState{
   nearbyEvents: fromNearbyEvents.State;
   teams: fromTeams.State;
   privateEvents: fromPrivateEvents.State;
+  challenges: fromChallenges.State;
+  results: fromResults.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -30,5 +34,7 @@ export const appReducer: ActionReducerMap<AppState> = {
   events: fromEvents.eventReducer,
   nearbyEvents: fromNearbyEvents.reducer,
   teams: fromTeams.teamReducer,
-  privateEvents: fromPrivateEvents.privateEventsReducer
+  privateEvents: fromPrivateEvents.privateEventsReducer,
+  challenges: fromChallenges.challengeReducer,
+  results: fromResults.resultsReducer
 }

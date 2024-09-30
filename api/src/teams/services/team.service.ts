@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Team } from '../entities/team.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateTeamDto } from '../dto/create-team.dto';
 import { User } from 'src/auth/user.entity';
 import { TeamDto } from '../dto/team-dto';
@@ -29,6 +29,36 @@ export class TeamService {
         teams = teams.filter(team => team.members.find(member => member.id === user.playerDetails.id));
 
         console.log(teams[1].members);
+
+        return teams.map(team => {
+            return {
+                id: team.id,
+                name: team.name,
+                sport: team.sport,
+                wins: team.wins,
+                losses: team.losses,
+                draws: team.draws,
+                captainUsername: team.captainUsername,
+                members: team.members.map(member => {
+                    return {
+                        userId: member.id,
+                        username: member.user.username,
+                        firstName: member.user.firstName,
+                        lastName: member.user.lastName,
+                        profilePicture: member.profilePicture
+                    }
+                })
+            }
+        });
+    }
+
+    async searchTeams(term: string): Promise<TeamDto[]>{
+        const teams = await this.teamRepository.find({
+            where: [
+                {name: ILike(`%${term}%`)}
+            ],
+            relations: ['members', 'members.user']
+        });
 
         return teams.map(team => {
             return {

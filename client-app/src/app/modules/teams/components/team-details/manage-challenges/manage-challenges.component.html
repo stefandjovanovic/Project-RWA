@@ -1,1 +1,74 @@
-<p>manage-challenges works!</p>
+<mat-tab-group dynamicHeight>
+  <mat-tab label="Outgoing">
+    <div>
+      <mat-form-field class="search-field">
+        <mat-label>Search for a team you want to challenge</mat-label>
+        <input matInput
+               placeholder="Team name"
+               name="name"
+               [formControl]="searchControl"
+        >
+      </mat-form-field>
+
+      <h4 *ngIf="searchResult.length === 0">There are no results...</h4>
+
+      <mat-nav-list *ngIf="searchResult.length > 0">
+        <mat-list-item *ngFor="let team of searchResult" [routerLink]="['challenge', 'create', selectedTeam?.id, team.id, team.sport]">
+          {{ team.name }}
+        </mat-list-item>
+      </mat-nav-list>
+
+
+    </div>
+
+
+  </mat-tab>
+
+  <mat-tab label="Incoming" >
+    <p *ngIf="pendingChallenges.length === 0" class="margin-top">There are no pending challenges</p>
+    <div *ngIf="pendingChallenges.length > 0" class="incoming">
+      <p class="margin-top">Please respond to pending challenges:</p>
+      <div *ngFor="let challenge of pendingChallenges">
+        <h4><b>Challenger:</b> {{challenge.challengerTeamName}}</h4>
+        <p>{{challenge.date | date}}, {{challenge.startTime}}:00 - {{challenge.endTime}}:00</p>
+        <p>Venue: {{challenge.courtName}} </p>
+        <p>Address: {{challenge.courtAddress}}</p>
+        <button mat-raised-button color="primary" (click)="acceptChallenge(challenge)" class="accept-button">Accept</button>
+        <button mat-raised-button color="warn" (click)="rejectChallenge(challenge)" class="reject-button">Reject</button>
+      </div>
+    </div>
+
+    <mat-tab label="Results" >
+      <div *ngIf="challengesResults.length > 0" class="incoming">
+        <p class="margin-top">Please report results for this challenges:</p>
+        <div *ngFor="let challenge of challengesResults">
+          <h4>{{challenge.challengerTeamName}} vs {{challenge.challengedTeamName}}</h4>
+          <p>{{challenge.date | date}}, {{challenge.startTime}}:00 - {{challenge.endTime}}:00</p>
+          <p>{{challenge.courtName}}, {{challenge.courtAddress}}</p>
+          <button mat-raised-button color="primary" (click)="reportResult(challenge)">Report result</button>
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div *ngIf="resultRequests.length > 0">
+        <p class="margin-top">Would you like to accept results for these challenges:</p>
+        <div *ngFor="let result of resultRequests">
+          <h4>{{result.challengerTeamName}}
+            <span class="score">{{result.challengerScore}} - {{result.challengedScore}}</span>
+            {{result.challengedTeamName}}</h4>
+          <p>Date: {{result.date | date}}</p>
+          <p>Court: {{result.courtName}}</p>
+
+          <button mat-raised-button color="primary" (click)="acceptResult(result)" class="accept-button">Accept</button>
+          <button mat-raised-button color="warn" (click)="rejectResult(result)" class="reject-button">Reject</button>
+
+        </div>
+
+      </div>
+
+
+    </mat-tab>
+
+
+  </mat-tab>
+</mat-tab-group>

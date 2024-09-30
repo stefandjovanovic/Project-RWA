@@ -23,6 +23,11 @@ export class TeamController {
         return this.teamService.getMyTeams(user.id);
     }
 
+    @Get('search/:term')
+    async searchTeams(@Param('term') term: string): Promise<TeamDto[]> {
+        return this.teamService.searchTeams(term);
+    }
+
     @Post('/create')
     async createTeam(@Body() createTeamDto: CreateTeamDto, @GetUser() user: User): Promise<TeamDto> {
         return this.teamService.createTeam(createTeamDto, user.id);

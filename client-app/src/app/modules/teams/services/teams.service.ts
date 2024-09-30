@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Team} from "../interfaces/team.interface";
 import {TeamCreate} from "../interfaces/team-create.interface";
 import {TeamMember} from "../interfaces/team-member.interface";
+import {EMPTY} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,13 @@ export class TeamsService {
   }
   removeMember(teamId: string, username: string){
     return this.http.delete(`${this.baseUrl}/remove-member/${teamId}/${username}`);
+  }
+
+  searchTeams(searchTerm: string){
+    if(searchTerm !== ''){
+      return this.http.get<Team[]>(`${this.baseUrl}/search/${searchTerm}`);
+    }else{
+      return EMPTY;
+    }
   }
 }

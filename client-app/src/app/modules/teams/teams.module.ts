@@ -16,7 +16,6 @@ import { TeamDetailsComponent } from './components/team-details/team-details.com
 import { ManageChallengesComponent } from './components/team-details/manage-challenges/manage-challenges.component';
 import { PrivateEventsComponent } from './components/team-details/private-events/private-events.component';
 import { TeamControlsComponent } from './components/team-details/team-controls/team-controls.component';
-import { TeamMatchesListComponent } from './components/team-details/team-matches-list/team-matches-list.component';
 import { UpcomingChallengesComponent } from './components/team-details/upcoming-challenges/upcoming-challenges.component';
 import { TeamsListComponent } from './components/teams-list/teams-list.component';
 import { TeamsComponent } from './components/teams/teams.component';
@@ -65,7 +64,6 @@ import {SharedModule} from "../shared/shared.module";
     ManageChallengesComponent,
     PrivateEventsComponent,
     TeamControlsComponent,
-    TeamMatchesListComponent,
     UpcomingChallengesComponent,
     TeamsListComponent,
     TeamsComponent

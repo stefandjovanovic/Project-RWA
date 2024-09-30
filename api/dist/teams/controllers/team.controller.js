@@ -29,6 +29,9 @@ let TeamController = class TeamController {
     async getMyTeams(user) {
         return this.teamService.getMyTeams(user.id);
     }
+    async searchTeams(term) {
+        return this.teamService.searchTeams(term);
+    }
     async createTeam(createTeamDto, user) {
         return this.teamService.createTeam(createTeamDto, user.id);
     }
@@ -53,6 +56,13 @@ __decorate([
     __metadata("design:paramtypes", [user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TeamController.prototype, "getMyTeams", null);
+__decorate([
+    (0, common_1.Get)('search/:term'),
+    __param(0, (0, common_1.Param)('term')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TeamController.prototype, "searchTeams", null);
 __decorate([
     (0, common_1.Post)('/create'),
     __param(0, (0, common_1.Body)()),

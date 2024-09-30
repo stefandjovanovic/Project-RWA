@@ -1,1 +1,47 @@
-<p>upcoming-challenges works!</p>
+<mat-tab-group dynamicHeight>
+  <mat-tab label="Accepted">
+    <p *ngIf="acceptedChallenges.length === 0" class="margin-top">There are no accepted challenges</p>
+    <div *ngIf="acceptedChallenges.length > 0">
+      <mat-list class="max-height">
+        <mat-list-item *ngFor="let challenge of acceptedChallenges" class="margin-top">
+          <mat-icon matListItemIcon>event_upcoming</mat-icon>
+          <h4 matListItemTitle>{{challenge.challengerTeamName}} vs {{challenge.challengedTeamName}}</h4>
+          <p matListItemLine>{{challenge.date | date}}, {{challenge.startTime}}:00 - {{challenge.endTime}}:00</p>
+          <p matListItemLine>Venue: {{challenge.courtName}} </p>
+          <p matListItemLine>Address: {{challenge.courtAddress}}</p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Rejected">
+    <p *ngIf="rejectedChallenges.length === 0" class="margin-top">There are no rejected challenges</p>
+    <div *ngIf="rejectedChallenges.length > 0">
+      <mat-list class="max-height">
+        <mat-list-item *ngFor="let challenge of rejectedChallenges" class="margin-top">
+          <mat-icon matListItemIcon>event_busy</mat-icon>
+          <h4 matListItemTitle>{{challenge.challengerTeamName}} vs {{challenge.challengedTeamName}}</h4>
+          <p matListItemLine>Venue: {{challenge.courtName}} </p>
+          <p matListItemLine>Address: {{challenge.courtAddress}}</p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+  </mat-tab>
+
+  <mat-tab label="Completed">
+    <p *ngIf="completedChallenges.length === 0" class="margin-top">There are no completed challenges</p>
+    <div *ngIf="completedChallenges.length > 0">
+      <mat-list class="max-height">
+        <mat-list-item *ngFor="let challenge of completedChallenges" class="margin-top">
+          <mat-icon matListItemIcon>event_available</mat-icon>
+          <h4 matListItemTitle>{{challenge.challengerTeamName}} vs {{challenge.challengedTeamName}}</h4>
+          <p matListItemLine>{{challenge.date | date}}, {{challenge.startTime}}:00 - {{challenge.endTime}}:00</p>
+          <p matListItemLine>Venue: {{challenge.courtName}} </p>
+          <p matListItemLine>Address: {{challenge.courtAddress}}</p>
+        </mat-list-item>
+      </mat-list>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>

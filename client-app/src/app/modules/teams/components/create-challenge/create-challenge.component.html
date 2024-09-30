@@ -1,1 +1,68 @@
-<p>create-challenge works!</p>
+<mat-stepper #stepper linear>
+
+  <mat-step [stepControl]="zeroFormGroup" errorMessage="You must select a court">
+    <form [formGroup]="zeroFormGroup" class="center">
+      <ng-template matStepLabel>Select a court</ng-template>
+      <mat-selection-list formControlName="zeroCtrl" [multiple]="false" (selectionChange)="onSelectionChange($event)">
+        <mat-list-option *ngFor="let court of courts" [value]="court">
+          <img *ngIf="court.image" matListItemAvatar [src]="court.image" alt="court">
+          <h3 matListItemTitle>{{court.name}}</h3>
+          <p matListItemLine>{{court.address}}</p>
+          <p matListItemLine *ngIf="court.isHall">Price: {{court.pricePerHour}} RSD</p>
+        </mat-list-option>
+      </mat-selection-list>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="firstFormGroup" errorMessage="Date is required" >
+    <form [formGroup]="firstFormGroup" class="center">
+      <ng-template matStepLabel>Choose a date</ng-template>
+      <mat-form-field>
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" (dateChange)="onDateChange($event)" formControlName="firstCtrl" required>
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+
+  <mat-step [stepControl]="secondFormGroup" errorMessage="Must choose schedule.">
+    <form [formGroup]="secondFormGroup" class="center">
+      <ng-template matStepLabel>Choose time slots</ng-template>
+      <h3 *ngIf="price > 0">Total price: {{price * selectedSlots.length}}</h3>
+      <app-schedule
+        [occupiedSlots]="occupiedSlots"
+        [startTime]="startTime"
+        [endTime]="endTime"
+        (selectedSlotsChange)="onSelectedSlotsChange($event)" >
+      </app-schedule>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <div class="center">
+      <p>Are you done?</p>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button (click)="finish()">Finish</button>
+      </div>
+    </div>
+  </mat-step>
+</mat-stepper>
