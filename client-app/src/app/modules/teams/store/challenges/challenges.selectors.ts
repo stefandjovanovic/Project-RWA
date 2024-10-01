@@ -54,6 +54,23 @@ export const selectCompletedChallenges = createSelector(
   }
 )
 
+export const selectChallengesResults = createSelector(
+  selectChallenges,
+  TeamsSelectors.selectSelectedTeam,
+  (challenges: Challenge[], selectedTeam: Team | null) => {
+    if(!selectedTeam){
+      return [];
+    }
+    return challenges
+      .filter(challenge =>
+        challenge.status === ChallengeStatus.ACCEPTED
+        && hasChallengeExpired(challenge)
+        && !challenge.resultSubmitted
+        && challenge.challengerTeamName === selectedTeam.name)
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+)
+
 
 const hasChallengeExpired = (challenge: Challenge): boolean => {
   const now = new Date();

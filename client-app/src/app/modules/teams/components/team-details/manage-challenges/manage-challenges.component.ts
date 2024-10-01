@@ -59,6 +59,10 @@ export class ManageChallengesComponent implements OnInit, OnDestroy{
       this.resultRequests = resultRequests;
     });
 
+    this.challengesResultsSubscription = this.store.select(ChallengesSelectors.selectChallengesResults).subscribe(challenges => {
+      this.challengesResults = challenges;
+    });
+
     this.searchSubscription = this.searchControl.valueChanges.pipe(
       debounceTime(300),
       filter((term): term is string => term !== null && term !== undefined),
@@ -82,6 +86,10 @@ export class ManageChallengesComponent implements OnInit, OnDestroy{
 
     if(this.pendingChallengesSubscription) {
       this.pendingChallengesSubscription.unsubscribe();
+    }
+
+    if(this.resultRequestsSubscription) {
+      this.resultRequestsSubscription.unsubscribe();
     }
 
     if(this.challengesResultsSubscription) {

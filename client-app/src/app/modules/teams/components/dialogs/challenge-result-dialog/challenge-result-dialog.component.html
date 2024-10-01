@@ -1,1 +1,35 @@
-<p>challenge-result-dialog works!</p>
+<div class="dialog">
+  <h2 mat-dialog-title>Submit a result for a challenge</h2>
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Home team score</mat-label>
+      <input matInput
+             type="number"
+             placeholder="0"
+             name="email"
+             [formControl]="homeScore"
+             required>
+      @if (homeScore.invalid) {
+        <mat-error>You must enter a score</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Away team score</mat-label>
+      <input matInput
+             type="number"
+             placeholder="0"
+             name="email"
+             [formControl]="awayScore"
+             required>
+      @if (awayScore.invalid) {
+        <mat-error>You must enter a score</mat-error>
+      }
+    </mat-form-field>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="submitResult()">Submit</button>
+  </mat-dialog-actions>
+</div>

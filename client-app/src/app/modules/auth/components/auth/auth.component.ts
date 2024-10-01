@@ -35,7 +35,7 @@ export class AuthComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     this.storeSub = this.store.select(selectAuthState).subscribe(authState => {
-      //this.isLoading = authState.loading;
+      this.isLoading = authState.loading;
       this.error = authState.authError;
     });
   }
@@ -50,7 +50,7 @@ export class AuthComponent implements OnInit, OnDestroy{
   onSwitchMode(form: NgForm){
     this.isSignInMode = !this.isSignInMode;
     this.error = null;
-    form.resetForm();
+    form.value.login.email.reset();
   }
 
   onSubmit(form: NgForm){
@@ -58,7 +58,7 @@ export class AuthComponent implements OnInit, OnDestroy{
       return;
     }
 
-    this.isLoading = true;
+    //this.isLoading = true;
 
     if(this.isSignInMode){
       this.signInUser.email = form.value.login.email;

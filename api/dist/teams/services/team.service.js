@@ -32,7 +32,6 @@ let TeamService = class TeamService {
             relations: ['members', 'members.user']
         });
         teams = teams.filter(team => team.members.find(member => member.id === user.playerDetails.id));
-        console.log(teams[1].members);
         return teams.map(team => {
             return {
                 id: team.id,

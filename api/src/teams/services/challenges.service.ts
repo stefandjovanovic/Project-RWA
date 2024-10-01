@@ -143,7 +143,7 @@ export class ChallengesService {
     async acceptResult(challengeId: string): Promise<void>{
         const challenge = await this.challengeRepository.findOne({
             where: {id: challengeId},
-            relations:['challengeResult', 'team']
+            relations:['challengeResult', 'challengerTeam', 'challengedTeam']
         });
         if(!challenge){
             throw new Error('Invalid challenge id');

@@ -10,10 +10,12 @@ import { ChallengesController } from './controllers/challenges.controller';
 import { ChallengesService } from './services/challenges.service';
 import { Challenge } from './entities/challenge.entity';
 import { ChallengeResult } from './entities/challenge-result.entity';
+import { TableController } from './controllers/table.controller';
+import { TableService } from './services/table.service';
 
 @Module({
-  controllers: [TeamController, ChallengesController],
-  providers: [TeamService, ChallengesService],
+  controllers: [TeamController, ChallengesController, TableController],
+  providers: [TeamService, ChallengesService, TableService],
   imports: [
     AuthModule,
     UsersModule, 

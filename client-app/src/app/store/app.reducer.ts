@@ -10,6 +10,7 @@ import * as fromTeams from "../modules/teams/store/teams/teams.reducer";
 import * as fromPrivateEvents from "../modules/teams/store/private-events/private-events.reducer";
 import * as fromChallenges from "../modules/teams/store/challenges/challenges.reducer";
 import * as fromResults from "../modules/teams/store/results/results.reducer";
+import * as fromTable from "../modules/teams/store/table/table.reducer";
 
 export interface AppState{
   auth: fromAuth.State;
@@ -23,6 +24,7 @@ export interface AppState{
   privateEvents: fromPrivateEvents.State;
   challenges: fromChallenges.State;
   results: fromResults.State;
+  table: fromTable.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -36,5 +38,6 @@ export const appReducer: ActionReducerMap<AppState> = {
   teams: fromTeams.teamReducer,
   privateEvents: fromPrivateEvents.privateEventsReducer,
   challenges: fromChallenges.challengeReducer,
-  results: fromResults.resultsReducer
+  results: fromResults.resultsReducer,
+  table: fromTable.tableReducer
 }

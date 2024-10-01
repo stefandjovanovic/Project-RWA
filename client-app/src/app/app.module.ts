@@ -28,6 +28,7 @@ import {TeamsEffects} from "./modules/teams/store/teams/teams.effects";
 import {PrivateEventsEffects} from "./modules/teams/store/private-events/private-events.effects";
 import {ChallengesEffects} from "./modules/teams/store/challenges/challenges.effects";
 import {ResultsEffects} from "./modules/teams/store/results/results.effects";
+import {TableEffects} from "./modules/teams/store/table/table.effects";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {ResultsEffects} from "./modules/teams/store/results/results.effects";
       TeamsEffects,
       PrivateEventsEffects,
       ChallengesEffects,
-      ResultsEffects
+      ResultsEffects,
+      TableEffects
     ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
   ],

@@ -19,13 +19,15 @@ const challenges_controller_1 = require("./controllers/challenges.controller");
 const challenges_service_1 = require("./services/challenges.service");
 const challenge_entity_1 = require("./entities/challenge.entity");
 const challenge_result_entity_1 = require("./entities/challenge-result.entity");
+const table_controller_1 = require("./controllers/table.controller");
+const table_service_1 = require("./services/table.service");
 let TeamsModule = class TeamsModule {
 };
 exports.TeamsModule = TeamsModule;
 exports.TeamsModule = TeamsModule = __decorate([
     (0, common_1.Module)({
-        controllers: [team_controller_1.TeamController, challenges_controller_1.ChallengesController],
-        providers: [team_service_1.TeamService, challenges_service_1.ChallengesService],
+        controllers: [team_controller_1.TeamController, challenges_controller_1.ChallengesController, table_controller_1.TableController],
+        providers: [team_service_1.TeamService, challenges_service_1.ChallengesService, table_service_1.TableService],
         imports: [
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
