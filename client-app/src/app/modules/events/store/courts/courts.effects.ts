@@ -3,7 +3,7 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {CourtsService} from "../../services/courts.service";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../store/app.reducer";
-import {map} from "rxjs/operators";
+import {map, toArray} from "rxjs/operators";
 import {catchError, of, switchMap, tap, withLatestFrom} from "rxjs";
 import * as CourtsActions from "./courts.actions";
 import {GeocodingService} from "../../services/geocoding.service";
@@ -72,6 +72,7 @@ export class CourtsEffects{
       );
     })
   ));
+
 
   updateCourt = createEffect(() =>
     this.actions$.pipe(

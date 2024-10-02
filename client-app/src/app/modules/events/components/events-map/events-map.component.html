@@ -2,7 +2,7 @@
   <div class="select-container">
     <mat-form-field class="margin-10">
       <mat-label>Select a sport</mat-label>
-      <mat-select [(value)]="selectedSport" (selectionChange)="onShowChanged()">
+      <mat-select #sportSelect value="all">
         <mat-option value="all">Show all courts</mat-option>
         <mat-option value="football">Football</mat-option>
         <mat-option value="basketball">Basketball</mat-option>
@@ -12,7 +12,7 @@
 
     <mat-form-field class="margin-10">
       <mat-label>Select a type of court</mat-label>
-      <mat-select [(value)]="selectedCourt" (selectionChange)="onShowChanged()">
+      <mat-select #courtSelect value="all">
         <mat-option value="all">Show all courts</mat-option>
         <mat-option value="street">Street court</mat-option>
         <mat-option value="hall">Hall</mat-option>
@@ -20,28 +20,6 @@
     </mat-form-field>
   </div>
 
-  <!--
-  <mat-form-field class="margin-10">
-      <mat-label>Select a sport</mat-label>
-      <mat-select [(value)]="selectedSport" (selectionChange)="onShowChanged()">
-        <mat-option value="all">Show all courts</mat-option>
-        <mat-option value="football">Football</mat-option>
-        <mat-option value="basketball">Basketball</mat-option>
-        <mat-option value="tennis">Tennis</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field class="margin-10">
-      <mat-label>Select a type of court</mat-label>
-      <mat-select [(value)]="selectedCourt" (selectionChange)="onShowChanged()">
-        <mat-option value="all">Show all courts</mat-option>
-        <mat-option value="street">Street court</mat-option>
-        <mat-option value="hall">Hall</mat-option>
-      </mat-select>
-    </mat-form-field>
-  -->
-
-  <!--  <div class="map" #map></div>-->
   <div class="map">
     <mgl-map #map
              [style]="'https://api.maptiler.com/maps/bright-v2/style.json?key=d96hSHCLErl8rkEEoIrM'"

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { EventsService } from '../services/events.service';
 import { EventDto } from '../dto/event.dto';
@@ -9,6 +9,7 @@ import { Role } from 'src/auth/enums/roles.enum';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { EventCreateDto } from '../dto/event-create.dto';
 import { PrivateEventDto } from '../dto/private-event.dto';
+import { UserEventDto } from 'src/users/dto/user-event.dto';
 
 @Roles([Role.PLAYER])
 @UseGuards(AuthGuard(), RolesGuard)
@@ -21,7 +22,7 @@ export class EventsController {
         return this.eventsService.createPublicEvent(eventCreateDto, user.playerDetails);
     }
 
-    @Post('/delete/:id')
+    @Delete('/delete/:id')
     deleteEvent(@Param('id') id: string): Promise<void> {
         return this.eventsService.deleteEvent(id);
     }
@@ -63,6 +64,11 @@ export class EventsController {
         @GetUser() user: User
     ): Promise<PrivateEventDto> {
         return this.eventsService.createPrivateEvent(eventCreateDto, user.id, teamId);
+    }
+
+    @Get('/player/:userId')
+    getUserEvents(@Param('userId') userId: string): Promise<UserEventDto[]> {
+        return this.eventsService.getUserEvents(userId);
     }
 
 

@@ -11,6 +11,7 @@ import { User } from 'src/auth/user.entity';
 import { HallCreateDto } from '../dto/hall-create.dto';
 import { GetScheduledSlotsDto } from '../dto/get-scheduled-slots.dto';
 import { ScheduledSlotsDto } from '../dto/scheduled-slots.dto';
+import { EventDto } from '../dto/event.dto';
 
 @UseGuards(AuthGuard())
 @Controller('court')
@@ -69,6 +70,11 @@ export class CourtController {
     @Get('/hall/manager')
     getMyHalls(@GetUser() user: User): Promise<CourtResponseDto[]> {
         return this.courtService.getMyHalls(user.managerDetails.id);
+    }
+
+    @Get('/hall/events/:courtId')
+    getCourtEvents(@Param('courtId') courtId: string): Promise<EventDto[]> {
+        return this.courtService.getEventsForCourt(courtId);
     }
 
     @Get('/scheduled-slots/:id')

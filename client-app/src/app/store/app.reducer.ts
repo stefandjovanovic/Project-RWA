@@ -11,6 +11,8 @@ import * as fromPrivateEvents from "../modules/teams/store/private-events/privat
 import * as fromChallenges from "../modules/teams/store/challenges/challenges.reducer";
 import * as fromResults from "../modules/teams/store/results/results.reducer";
 import * as fromTable from "../modules/teams/store/table/table.reducer";
+import * as fromHallEvents from "../modules/events/store/hall-events/hall-events.reducer";
+import * as fromPlayerEvents from "../modules/player/store/player-events/player-events.reducer";
 
 export interface AppState{
   auth: fromAuth.State;
@@ -18,6 +20,7 @@ export interface AppState{
   playerPage: fromPlayerPage.State;
   courts: fromCourts.State;
   halls: fromHalls.State;
+  hallEvents: fromHallEvents.State;
   events: fromEvents.State;
   nearbyEvents: fromNearbyEvents.State;
   teams: fromTeams.State;
@@ -25,6 +28,7 @@ export interface AppState{
   challenges: fromChallenges.State;
   results: fromResults.State;
   table: fromTable.State;
+  playerEvents: fromPlayerEvents.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -33,11 +37,13 @@ export const appReducer: ActionReducerMap<AppState> = {
   playerPage: fromPlayerPage.playerPageReducer,
   courts: fromCourts.courtsReducer,
   halls: fromHalls.hallsReducer,
+  hallEvents: fromHallEvents.hallEventsReducer,
   events: fromEvents.eventReducer,
   nearbyEvents: fromNearbyEvents.reducer,
   teams: fromTeams.teamReducer,
   privateEvents: fromPrivateEvents.privateEventsReducer,
   challenges: fromChallenges.challengeReducer,
   results: fromResults.resultsReducer,
-  table: fromTable.tableReducer
+  table: fromTable.tableReducer,
+  playerEvents: fromPlayerEvents.playerEventsReducer
 }

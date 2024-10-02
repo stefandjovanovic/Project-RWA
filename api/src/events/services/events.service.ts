@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 import { EventDto } from '../dto/event.dto';
@@ -11,6 +11,7 @@ import { Console } from 'console';
 import { PrivateEventDto } from '../dto/private-event.dto';
 import { User } from 'src/auth/user.entity';
 import { Team } from 'src/teams/entities/team.entity';
+import { UserEventDto } from 'src/users/dto/user-event.dto';
 
 @Injectable()
 export class EventsService {
@@ -444,6 +445,63 @@ export class EventsService {
         return eventDtos;      
     }
 
+    async getUserEvents(userId: string): Promise<UserEventDto[]> {
+        const userPlayerDetails = await this.playerRepository.findOne({
+            where: {user: {id: userId}},
+            relations: ['events', 'events.court', 'events.timeSlot', 'events.owner']
+        });
+
+        if(!userPlayerDetails){
+            throw new NotFoundException(`User with id ${userId} not found`);
+        }
+        if(!userPlayerDetails.events || userPlayerDetails.events.length === 0){
+            return [];
+        }
+
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+
+        const events = userPlayerDetails.events.filter(event => {
+            const eventDate = event.date;
+            eventDate.setUTCHours(0, 0, 0, 0);
+            //passed events
+            if(eventDate < today){
+                return false;
+            }
+            //events that are today
+            if(eventDate.getDate() === today.getDate()
+                && eventDate.getMonth() === today.getMonth()
+                && eventDate.getFullYear() === today.getFullYear()
+                && event.timeSlot.startTime < todayHours){
+                return false;
+            }
+            return true;
+        });
+
+        const userEvents: UserEventDto[] = await Promise.all(events.map( async event => {
+            const userEvent = new UserEventDto();
+            userEvent.courtAddress = event.court.address;
+            userEvent.courtImage = event.court.image;
+            userEvent.courtName = event.court.name;
+            userEvent.day = event.timeSlot.date;
+            userEvent.description = event.description;
+            userEvent.endTime = event.timeSlot.endTime;
+            const owner = await this.playerRepository.findOne({
+                where: {id: event.owner.id},
+                relations: ['user']
+            });
+            userEvent.hostUserName = owner.user.username;
+            userEvent.id = event.id;
+            userEvent.numOfParticipants = event.numOfParticipants;
+            userEvent.sport = event.sport;
+            userEvent.startTime = event.timeSlot.startTime;
+            userEvent.title = event.title;
+            return userEvent;
+        }));
+        return userEvents;
+    }
+
     async createPrivateEvent(eventCreateDto: EventCreateDto, userId: string, teamId: string): Promise<PrivateEventDto> {
         const user = await this.userRepository.findOne({
             where: {id: userId},
@@ -526,4 +584,6 @@ export class EventsService {
 
 
     }
+
+    
 }}

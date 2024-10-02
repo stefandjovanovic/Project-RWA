@@ -3,6 +3,7 @@ import { EventDto } from '../dto/event.dto';
 import { User } from 'src/auth/user.entity';
 import { EventCreateDto } from '../dto/event-create.dto';
 import { PrivateEventDto } from '../dto/private-event.dto';
+import { UserEventDto } from 'src/users/dto/user-event.dto';
 export declare class EventsController {
     private eventsService;
     constructor(eventsService: EventsService);
@@ -15,4 +16,5 @@ export declare class EventsController {
     getNearbyEvents(longitude: number, latitude: number): Promise<EventDto[]>;
     getPrivateEvents(teamId: string): Promise<PrivateEventDto[]>;
     createPrivateEvent(eventCreateDto: EventCreateDto, teamId: string, user: User): Promise<PrivateEventDto>;
+    getUserEvents(userId: string): Promise<UserEventDto[]>;
 }

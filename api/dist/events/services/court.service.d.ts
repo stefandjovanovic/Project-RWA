@@ -6,6 +6,7 @@ import { PlayerDetails } from 'src/users/entities/player-details.entity';
 import { ManagerDetails } from 'src/users/entities/manager-details.entity';
 import { HallCreateDto } from '../dto/hall-create.dto';
 import { ScheduledSlotsDto } from '../dto/scheduled-slots.dto';
+import { EventDto } from '../dto/event.dto';
 export declare class CourtService {
     private courtRepository;
     private playerDetailsRepository;
@@ -20,4 +21,5 @@ export declare class CourtService {
     getAllCourts(): Promise<CourtResponseDto[]>;
     getMyHalls(managerId: string): Promise<CourtResponseDto[]>;
     getScheduledSlots(id: string, dateString: string): Promise<ScheduledSlotsDto>;
+    getEventsForCourt(courtId: string): Promise<EventDto[]>;
 }

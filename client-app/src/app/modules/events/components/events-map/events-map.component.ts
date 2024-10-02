@@ -1,13 +1,17 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Map, MapStyle, config, Marker} from '@maptiler/sdk';
+import {Map, Marker} from '@maptiler/sdk';
 import {Court} from "../../interfaces/court.interface";
-import {Observable, Subscription} from "rxjs";
+import {Observable, startWith, Subscription} from "rxjs";
+import {combineLatestWith, map} from "rxjs/operators";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../store/app.reducer";
 import * as CourtsSelectors from "../../store/courts/courts.selectors";
 import * as CourtsActions from "../../store/courts/courts.actions";
 import * as AuthSelectors from "../../../auth/store/auth/auth.selectors";
 import {CourtsService} from "../../services/courts.service";
+import {MatSelect} from "@angular/material/select";
+import {CourtFilter} from "../../enums/court-filter.enum";
+import {SportFilter} from "../../enums/sport-filter.enum";
 
 
 @Component({
@@ -16,13 +20,20 @@ import {CourtsService} from "../../services/courts.service";
   styleUrl: './events-map.component.css'
 })
 export class EventsMapComponent implements OnInit, OnDestroy{
+  @ViewChild('sportSelect', { static: true }) sportSelect!: MatSelect;
+  @ViewChild('courtSelect', { static: true }) courtSelect!: MatSelect;
+
+  sportSelectObs: Observable<SportFilter> = new Observable<SportFilter>();
+  courtSelectObs: Observable<CourtFilter>= new Observable<CourtFilter>();
+
+  selectionSubscription?: Subscription;
+
+
   map: Map | undefined;
 
   courts: Court[] = [];
   showingCourts: boolean[] = [];
   storeSubscription?: Subscription;
-  selectedSport: string = 'all';
-  selectedCourt: string = 'all';
 
   @ViewChild('map')
   private mapContainer!: ElementRef<HTMLElement>;
@@ -35,10 +46,25 @@ export class EventsMapComponent implements OnInit, OnDestroy{
     this.storeSubscription = this.store.select(CourtsSelectors.selectCourts).subscribe(courts => {
       this.courts = courts;
       this.showingCourts = new Array(courts.length).fill(true);
-      this.onShowChanged();
     });
     this.role = this.store.select(AuthSelectors.selectRole);
     this.store.dispatch(CourtsActions.loadCourts());
+
+    this.sportSelectObs = this.sportSelect.selectionChange.pipe(
+      map(event => event.value),
+      startWith(SportFilter.ALL)
+    );
+
+    this.courtSelectObs = this.courtSelect.selectionChange.pipe(
+      map(event => event.value),
+      startWith(CourtFilter.ALL)
+    );
+
+    this.selectionSubscription = this.sportSelectObs.pipe(
+      combineLatestWith(this.courtSelectObs)
+    ).subscribe(([sport, courtType]) => {
+      this.filterCourts(sport, courtType);
+    });
 
 
   }
@@ -47,37 +73,35 @@ export class EventsMapComponent implements OnInit, OnDestroy{
     if(this.storeSubscription){
       this.storeSubscription.unsubscribe();
     }
+    if (this.selectionSubscription){
+      this.selectionSubscription.unsubscribe();
+    }
   }
 
-  addMarker(latitude: number, longitude: number, isHall: boolean, courtId: string){
-    const markerColor = isHall ? "#a86932" : "#326da8";
 
-    new Marker({color: markerColor})
-      .setLngLat([longitude, latitude])
-      .on('click', (e) => {
-        console.log(e.lngLat)
-        console.log(courtId);
-      })
-      .addTo(this.map!);
-  }
 
-  onShowChanged(){
+
+  filterCourts(sport: SportFilter, courtType: CourtFilter) {
     this.courts.forEach((court, index) => {
-      if(this.selectedSport==='all' && this.selectedCourt==='all'){
-        this.showingCourts[index] = true;
-      }else if(this.selectedSport!=='all' && this.selectedCourt==='all'){
-        this.showingCourts[index] = court.sport === this.selectedSport;
-      }else if(this.selectedSport!=='all' && this.selectedCourt==='hall'){
-        this.showingCourts[index] = court.sport === this.selectedSport && court.isHall;
-      }else if(this.selectedSport!=='all' &&this.selectedCourt==='street'){
-        this.showingCourts[index] = court.sport === this.selectedSport && !court.isHall;
-      }else if(this.selectedSport==='all' && this.selectedCourt==='hall'){
-        this.showingCourts[index] = court.isHall;
-      }else{
-        this.showingCourts[index] = !court.isHall;
+      let showCourt = true;
+
+      if(sport !== SportFilter.ALL){
+        showCourt = court.sport as string === sport as string;
       }
+
+      if(courtType === CourtFilter.HALL) {
+        showCourt = showCourt && court.isHall;
+      }
+
+      if(courtType === CourtFilter.STREET) {
+        showCourt = showCourt && !court.isHall;
+      }
+
+      this.showingCourts[index] = showCourt;
+
     })
   }
+
 
   onMarkerClick(clickedCourt: Court){
     this.courtsService.courtSelected.emit(clickedCourt);

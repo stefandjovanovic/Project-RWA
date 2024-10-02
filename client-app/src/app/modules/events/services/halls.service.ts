@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Court} from "../interfaces/court.interface";
 import {HallCreate} from "../interfaces/hall-create.interface";
 import {Subject} from "rxjs";
+import {EventInterface} from "../interfaces/event.inerface";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import {Subject} from "rxjs";
 export class HallsService {
   baseUrl = 'http://localhost:3000/court/hall';
   successfullyUpdated: Subject<boolean> = new Subject<boolean>();
+  successfullyCreated: Subject<boolean> = new Subject<boolean>();
 
   constructor(private http: HttpClient) { }
 
@@ -27,5 +29,9 @@ export class HallsService {
 
   deleteHall(id: string){
     return this.http.delete(`${this.baseUrl}/delete/${id}`);
+  }
+
+  getEventsForHall(hallId: string){
+    return this.http.get<EventInterface[]>(`${this.baseUrl}/events/${hallId}`);
   }
 }

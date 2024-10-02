@@ -11,6 +11,8 @@ import { ReviewDto } from './dto/review.dto';
 import { Review } from './entities/review.entity';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { PhotoDto } from './dto/photo.dto';
+import { UserEventDto } from './dto/user-event.dto';
+import { Court } from 'src/events/entities/court.entity';
 
 @Injectable()
 export class UsersService {
@@ -201,6 +203,8 @@ export class UsersService {
             return playerDetails;
         });
     }
+
+    
 
 
 }

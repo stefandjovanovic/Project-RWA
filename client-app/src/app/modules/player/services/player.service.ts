@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {PlayerDetails} from "../interfaces/player-details.interface";
 import {Review} from "../interfaces/review.interface";
+import {UserEventData} from "../interfaces/user-event-data.interface";
+import {of} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +36,14 @@ export class PlayerService {
   }
 
   searchPlayers(search: string){
+    if(search === ''){
+      return of([]);
+    }
     return this.http.get<PlayerDetails[]>(`${this.baseUrl}/search/${search}`);
+  }
+
+  getUserEvents(userId: string){
+    return this.http.get<UserEventData[]>(`http://localhost:3000/events/player/${userId}`);
   }
 
 }

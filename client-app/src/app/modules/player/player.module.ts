@@ -18,6 +18,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ImageCropperComponent} from "ngx-image-cropper";
+import { PlayerEventsComponent } from './components/player-events/player-events.component';
+import {AuthGuard} from "../auth/guards/auth.guard";
 
 
 
@@ -29,11 +31,13 @@ import {ImageCropperComponent} from "ngx-image-cropper";
     PlayerPageComponent,
     ReviewsListComponent,
     SearchPlayerDialogComponent,
+    PlayerEventsComponent,
   ],
   imports: [
     CommonModule,
     RouterModule.forChild([
-      {path: 'page/:username', canActivate: [PlayerGuard], component: PlayerPageComponent}
+      {path: 'page/:username', canActivate: [PlayerGuard], component: PlayerPageComponent},
+      {path: 'events', canActivate: [AuthGuard, PlayerGuard], component: PlayerEventsComponent}
     ]),
     MatGridListModule,
     MatButtonModule,

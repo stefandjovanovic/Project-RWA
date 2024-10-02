@@ -7,6 +7,7 @@ import { Court } from '../entities/court.entity';
 import { PrivateEventDto } from '../dto/private-event.dto';
 import { User } from 'src/auth/user.entity';
 import { Team } from 'src/teams/entities/team.entity';
+import { UserEventDto } from 'src/users/dto/user-event.dto';
 export declare class EventsService {
     private eventRepository;
     private courtRepository;
@@ -23,5 +24,6 @@ export declare class EventsService {
     getNearbyEvents(userLongitude: number, userLatitude: number): Promise<EventDto[]>;
     private getDistanceInMeters;
     getPrivateEvents(teamId: string): Promise<PrivateEventDto[]>;
+    getUserEvents(userId: string): Promise<UserEventDto[]>;
     createPrivateEvent(eventCreateDto: EventCreateDto, userId: string, teamId: string): Promise<PrivateEventDto>;
 }

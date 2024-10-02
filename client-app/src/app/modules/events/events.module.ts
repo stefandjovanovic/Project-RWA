@@ -36,6 +36,8 @@ import { HallEventsListComponent } from './components/halls/hall-events-list/hal
 import { HallNewComponent } from './components/halls/hall-new/hall-new.component';
 import { HallsListComponent } from './components/halls/halls-list/halls-list.component';
 import {SharedModule} from "../shared/shared.module";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatSortModule} from "@angular/material/sort";
 
 
 
@@ -82,7 +84,10 @@ import {SharedModule} from "../shared/shared.module";
     MatExpansionModule,
     MatIconModule,
     MatMenuModule,
-    SharedModule
+    SharedModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ]
 })
 export class EventsModule { }

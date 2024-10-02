@@ -53,6 +53,9 @@ let EventsController = class EventsController {
     createPrivateEvent(eventCreateDto, teamId, user) {
         return this.eventsService.createPrivateEvent(eventCreateDto, user.id, teamId);
     }
+    getUserEvents(userId) {
+        return this.eventsService.getUserEvents(userId);
+    }
 };
 exports.EventsController = EventsController;
 __decorate([
@@ -64,7 +67,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "createPublicEvent", null);
 __decorate([
-    (0, common_1.Post)('/delete/:id'),
+    (0, common_1.Delete)('/delete/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -124,6 +127,13 @@ __decorate([
     __metadata("design:paramtypes", [event_create_dto_1.EventCreateDto, String, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], EventsController.prototype, "createPrivateEvent", null);
+__decorate([
+    (0, common_1.Get)('/player/:userId'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], EventsController.prototype, "getUserEvents", null);
 exports.EventsController = EventsController = __decorate([
     (0, roles_decorator_1.Roles)([roles_enum_1.Role.PLAYER]),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)(), roles_guard_1.RolesGuard),

@@ -8,7 +8,9 @@ export interface State extends EntityState<ResultRequest>{
 
 }
 
-export const adapter = createEntityAdapter<ResultRequest>();
+export const adapter = createEntityAdapter<ResultRequest>({
+  selectId: (resultRequest: ResultRequest) => resultRequest.challengeId
+});
 
 export const initialState: State = adapter.getInitialState();
 

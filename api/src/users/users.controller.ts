@@ -11,6 +11,7 @@ import { User } from 'src/auth/user.entity';
 import { ReviewDto } from './dto/review.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotoDto } from './dto/photo.dto';
+import { UserEventDto } from './dto/user-event.dto';
 
 @UseGuards(AuthGuard())
 @Controller('users')
@@ -82,5 +83,7 @@ export class UsersController {
     searchUser(@Param('username') username: string): Promise<PlayerDetailsDto[]> {
         return this.usersService.searchUser(username);
     }
+
+    
 
 }

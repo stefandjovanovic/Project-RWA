@@ -1,0 +1,21 @@
+<div class="parent">
+  <div class="container">
+    <h2>Upcoming Events:</h2>
+    <mat-card class="card" *ngFor="let event of events">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>{{event.day | date}}, {{event.startTime}}:00 - {{event.endTime}}:00</mat-card-title>
+          <mat-card-subtitle>{{event.courtName}}, {{event.courtAddress}}</mat-card-subtitle>
+          <img *ngIf="event.courtImage" mat-card-sm-image src="{{event.courtImage}}" alt="Court Image" class="image">
+        </mat-card-title-group>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p>Host username: {{event.hostUserName}}</p>
+        <p>Description: {{event.description}}</p>
+        <p>Number of participants: {{event.numOfParticipants}}</p>
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+</div>

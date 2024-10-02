@@ -33,7 +33,7 @@ export class HallEditComponent implements OnChanges, OnInit, OnDestroy{
   ngOnInit() {
     this.isLoading = this.store.select(HallsSelectors.selectHallsLoading);
     this.updatedSub = this.hallsService.successfullyUpdated.subscribe({
-      next: (value) => {
+      next: () => {
         this.hallEdited.emit('over');
         console.log("Hall updated");
       }

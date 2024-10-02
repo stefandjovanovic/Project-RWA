@@ -42,6 +42,15 @@ export class NearbyEventsEffects{
     )
   );
 
+  // calculateUserLocationCombinationOperators = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(NearbyEventActions.calculateUserLocation),
+  //     withLatestFrom(this.store.select(AuthSelectors.selectUser)),
+  //   )
+  // );
+
+
+
   loadNearbyEvents = createEffect(() =>
     this.actions$.pipe(
       ofType(NearbyEventActions.calculateUserLocationSuccess),

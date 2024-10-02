@@ -22,6 +22,7 @@ const court_entity_1 = require("../entities/court.entity");
 const time_slot_entity_1 = require("../entities/time-slot.entity");
 const user_entity_1 = require("../../auth/user.entity");
 const team_entity_1 = require("../../teams/entities/team.entity");
+const user_event_dto_1 = require("../../users/dto/user-event.dto");
 let EventsService = class EventsService {
     constructor(eventRepository, courtRepository, playerRepository, userRepository, teamRepository) {
         this.eventRepository = eventRepository;
@@ -381,6 +382,56 @@ let EventsService = class EventsService {
             };
         }));
         return eventDtos;
+    }
+    async getUserEvents(userId) {
+        const userPlayerDetails = await this.playerRepository.findOne({
+            where: { user: { id: userId } },
+            relations: ['events', 'events.court', 'events.timeSlot', 'events.owner']
+        });
+        if (!userPlayerDetails) {
+            throw new common_1.NotFoundException(`User with id ${userId} not found`);
+        }
+        if (!userPlayerDetails.events || userPlayerDetails.events.length === 0) {
+            return [];
+        }
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+        const events = userPlayerDetails.events.filter(event => {
+            const eventDate = event.date;
+            eventDate.setUTCHours(0, 0, 0, 0);
+            if (eventDate < today) {
+                return false;
+            }
+            if (eventDate.getDate() === today.getDate()
+                && eventDate.getMonth() === today.getMonth()
+                && eventDate.getFullYear() === today.getFullYear()
+                && event.timeSlot.startTime < todayHours) {
+                return false;
+            }
+            return true;
+        });
+        const userEvents = await Promise.all(events.map(async (event) => {
+            const userEvent = new user_event_dto_1.UserEventDto();
+            userEvent.courtAddress = event.court.address;
+            userEvent.courtImage = event.court.image;
+            userEvent.courtName = event.court.name;
+            userEvent.day = event.timeSlot.date;
+            userEvent.description = event.description;
+            userEvent.endTime = event.timeSlot.endTime;
+            const owner = await this.playerRepository.findOne({
+                where: { id: event.owner.id },
+                relations: ['user']
+            });
+            userEvent.hostUserName = owner.user.username;
+            userEvent.id = event.id;
+            userEvent.numOfParticipants = event.numOfParticipants;
+            userEvent.sport = event.sport;
+            userEvent.startTime = event.timeSlot.startTime;
+            userEvent.title = event.title;
+            return userEvent;
+        }));
+        return userEvents;
     }
     async createPrivateEvent(eventCreateDto, userId, teamId) {
         const user = await this.userRepository.findOne({

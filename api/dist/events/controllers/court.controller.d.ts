@@ -4,6 +4,7 @@ import { CourtCreateDto } from '../dto/court-create.dto';
 import { User } from 'src/auth/user.entity';
 import { HallCreateDto } from '../dto/hall-create.dto';
 import { ScheduledSlotsDto } from '../dto/scheduled-slots.dto';
+import { EventDto } from '../dto/event.dto';
 export declare class CourtController {
     private courtService;
     constructor(courtService: CourtService);
@@ -15,5 +16,6 @@ export declare class CourtController {
     deleteHall(id: string): Promise<void>;
     getAllCourts(): Promise<CourtResponseDto[]>;
     getMyHalls(user: User): Promise<CourtResponseDto[]>;
+    getCourtEvents(courtId: string): Promise<EventDto[]>;
     getScheduledSlots(id: string, date: string): Promise<ScheduledSlotsDto>;
 }

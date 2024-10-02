@@ -35,7 +35,7 @@ let ChallengesService = class ChallengesService {
         challenge.sport = createChallengeDto.sport;
         const court = await this.courtRepository.findOne({
             where: { id: createChallengeDto.courtId },
-            relations: ['challenges']
+            relations: ['challenges', 'timeSlots']
         });
         if (court.challenges) {
             court.challenges.push(challenge);
@@ -51,6 +51,8 @@ let ChallengesService = class ChallengesService {
         timeSlot.startTime = createChallengeDto.startTime;
         timeSlot.endTime = createChallengeDto.endTime;
         timeSlot.challenge = challenge;
+        timeSlot.court = court;
+        court.timeSlots.push(timeSlot);
         challenge.timeSlot = timeSlot;
         challenge.status = challenge_status_enum_1.ChallengeStatus.PENDING;
         challenge.resultSubmited = false;

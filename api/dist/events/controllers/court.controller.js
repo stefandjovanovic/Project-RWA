@@ -51,6 +51,9 @@ let CourtController = class CourtController {
     getMyHalls(user) {
         return this.courtService.getMyHalls(user.managerDetails.id);
     }
+    getCourtEvents(courtId) {
+        return this.courtService.getEventsForCourt(courtId);
+    }
     getScheduledSlots(id, date) {
         return this.courtService.getScheduledSlots(id, date);
     }
@@ -128,6 +131,13 @@ __decorate([
     __metadata("design:paramtypes", [user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], CourtController.prototype, "getMyHalls", null);
+__decorate([
+    (0, common_1.Get)('/hall/events/:courtId'),
+    __param(0, (0, common_1.Param)('courtId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], CourtController.prototype, "getCourtEvents", null);
 __decorate([
     (0, common_1.Get)('/scheduled-slots/:id'),
     __param(0, (0, common_1.Param)('id')),

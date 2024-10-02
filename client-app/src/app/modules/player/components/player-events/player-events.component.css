@@ -1,0 +1,26 @@
+.parent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+
+.container{
+  margin: 20px;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  height: 80vh;
+}
+
+.card{
+  margin: 10px;
+  width: 95%;
+}
+
+.image{
+  margin: 5px;
+  border-radius: 5px;
+}

@@ -55,7 +55,7 @@ export class HallsEffects{
             pricePerHour: actionData.pricePerHour
           }).pipe(
             map(court => {
-              return CourtsActions.courtCreateSuccess({court});
+              return HallsActions.hallCreateSuccess({hall: court});
             })
           );
         })
@@ -87,7 +87,7 @@ export class HallsEffects{
               pricePerHour: actionData.pricePerHour
             }, actionData.id).pipe(
               map(court => {
-                return CourtsActions.courtUpdateSuccess({court});
+                return HallsActions.hallUpdateSuccess({hall: court});
               })
             );
           })

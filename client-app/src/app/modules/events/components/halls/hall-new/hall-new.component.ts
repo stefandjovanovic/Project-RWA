@@ -27,7 +27,7 @@ export class HallNewComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.isLoading = this.store.select(HallsSelectors.selectHallsLoading);
-    this.hallsSub = this.hallsService.successfullyUpdated.subscribe((value) => {
+    this.hallsSub = this.hallsService.successfullyCreated.subscribe(() => {
       this.hallCreated.emit('over');
     });
   }

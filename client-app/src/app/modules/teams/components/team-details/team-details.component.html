@@ -1,4 +1,6 @@
 <mat-accordion class="form">
+  <h2 class="team-name">{{selectedTeam?.name}}</h2>
+  <h3 class="members">{{selectedTeam?.members?.length}} members</h3>
   <mat-expansion-panel *ngIf="isCaptain">
     <mat-expansion-panel-header>
       <mat-panel-title>

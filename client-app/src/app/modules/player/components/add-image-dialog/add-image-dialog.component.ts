@@ -41,6 +41,7 @@ export class AddImageDialogComponent {
       return;
     }
     this.isUploading = true;
+    this.store.dispatch(PlayerPageActions.uploadProfilePicture({file: this.imageBinary!}));
 
     this.store.select(PlayerPageSelectors.selectUploadingPicture).subscribe((uploading) => {
       if(!uploading){
@@ -49,7 +50,7 @@ export class AddImageDialogComponent {
       }
     })
 
-    this.store.dispatch(PlayerPageActions.uploadProfilePicture({file: this.imageBinary!}));
+
 
 
   }

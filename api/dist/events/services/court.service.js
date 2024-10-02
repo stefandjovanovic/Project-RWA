@@ -95,7 +95,10 @@ let CourtService = class CourtService {
         await this.courtRepository.remove(court);
     }
     async createHall(hallCreateDto, managerId) {
-        const manager = await this.managerDetailsRepository.findOneBy({ id: managerId });
+        const manager = await this.managerDetailsRepository.findOne({
+            where: { id: managerId },
+            relations: ['courts']
+        });
         const court = new court_entity_1.Court();
         court.sport = hallCreateDto.sport;
         court.name = hallCreateDto.name;
@@ -244,6 +247,67 @@ let CourtService = class CourtService {
                 };
             }),
         };
+    }
+    async getEventsForCourt(courtId) {
+        const court = await this.courtRepository.findOne({
+            where: { id: courtId },
+            relations: ['events', 'events.timeSlot', 'events.owner', 'events.court']
+        });
+        if (!court) {
+            throw new Error('Court not found');
+        }
+        if (!court.events) {
+            return [];
+        }
+        const today = new Date();
+        const todayHours = today.getHours();
+        today.setUTCHours(0, 0, 0, 0);
+        const events = court.events.filter(event => {
+            const eventDate = event.date;
+            eventDate.setUTCHours(0, 0, 0, 0);
+            if (eventDate < today) {
+                return false;
+            }
+            if (eventDate.getDate() === today.getDate()
+                && eventDate.getMonth() === today.getMonth()
+                && eventDate.getFullYear() === today.getFullYear()
+                && event.timeSlot.startTime < todayHours) {
+                return false;
+            }
+            return true;
+        });
+        const eventDtos = await Promise.all(events.map(async (event) => {
+            const owner = await this.playerDetailsRepository.findOne({
+                where: { id: event.owner.id },
+                relations: ['user']
+            });
+            const participants = await this.playerDetailsRepository.find({
+                where: { events: { id: event.id } },
+                relations: ['user']
+            });
+            return {
+                id: event.id,
+                title: event.title,
+                description: event.description,
+                date: event.date,
+                sport: event.sport,
+                numOfParticipants: event.numOfParticipants,
+                maxParticipants: event.maxParticipants,
+                price: event.price,
+                startTime: event.timeSlot.startTime,
+                endTime: event.timeSlot.endTime,
+                eventOwnerUsername: owner.user.username,
+                participants: participants.map(p => p.user.username),
+                court: {
+                    name: event.court.name,
+                    address: event.court.address,
+                    longitude: event.court.longitude,
+                    latitude: event.court.latitude,
+                    image: event.court.image
+                }
+            };
+        }));
+        return eventDtos;
     }
 };
 exports.CourtService = CourtService;

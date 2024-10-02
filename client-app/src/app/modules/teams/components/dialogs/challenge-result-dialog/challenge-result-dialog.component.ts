@@ -30,7 +30,7 @@ export class ChallengeResultDialogComponent {
   submitResult(){
 
     if(this.homeScore.valid && this.awayScore.valid) {
-      if(this.homeScore.value && this.awayScore.value){
+      if(this.homeScore.value !== null && this.awayScore.value !== null){
         this.store.dispatch(ResultsActions.submitResult({result:{
             challengeId: this.data.challenge.id,
             homeScore: +this.homeScore.value,
